@@ -23,7 +23,7 @@ const words = [
   {
     id: 1,
     word: 'café',
-    image: '/images/cafe.webp',
+    image: '/images/mao.png',
     translation: 'coffee',
     options: ['tea', 'coffee', 'water', 'milk'],
     category: 'Food',
@@ -262,7 +262,7 @@ const QuizApp = () => {
                       image={words[currentWord].image}
                       alt={words[currentWord].word}
                       sx={{
-                        borderRadius: 4,
+                        borderRadius: 1,
                         mb: 4,
                         boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
                       }}
