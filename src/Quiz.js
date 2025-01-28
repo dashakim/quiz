@@ -18,10 +18,44 @@ import {
 } from '@mui/material';
 import { VolumeUp, Settings, Grade, TrendingUp, Person } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { themes } from './themes';
 import ThemeSelector from './ThemeSelector';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, Fab, Tooltip, Stack } from '@mui/material';
+import { Palette, DarkMode, LightMode, FormatSize } from '@mui/icons-material';
 
 const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
+
+const SettingsBar = ({ onThemeClick, onVolumeClick, isDark, onToggleDark }) => (
+  <Stack
+    direction="row"
+    spacing={1}
+    sx={{
+      position: 'fixed',
+      top: 16,
+      right: 16,
+      zIndex: 1000,
+      bgcolor: 'background.paper',
+      borderRadius: 'pill',
+      p: 1,
+      boxShadow: 3,
+    }}
+  >
+    <Tooltip title="Change Theme">
+      <IconButton onClick={onThemeClick} color="primary">
+        <Palette />
+      </IconButton>
+    </Tooltip>
+    <Tooltip title="Volume">
+      <IconButton onClick={onVolumeClick} color="primary">
+        <VolumeUp />
+      </IconButton>
+    </Tooltip>
+    <Tooltip title={isDark ? 'Light Mode' : 'Dark Mode'}>
+      <IconButton onClick={onToggleDark} color="primary">
+        {isDark ? <LightMode /> : <DarkMode />}
+      </IconButton>
+    </Tooltip>
+  </Stack>
+);
 
 const words = [
   {
@@ -126,7 +160,7 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-
+  const [isDark, setIsDark] = useState(false);
   useEffect(() => {
     setProgress((currentWord / words.length) * 100);
   }, [currentWord]);
@@ -160,6 +194,14 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
         transition: theme.transitions.create(['background-color']),
       }}
     >
+      <Box>
+        <SettingsBar
+          onThemeClick={() => setDrawerOpen(true)}
+          onVolumeClick={() => {}}
+          isDark={isDark}
+          onToggleDark={() => setIsDark(!isDark)}
+        />
+      </Box>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -249,7 +291,8 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 bgcolor: 'background.paper',
-                boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 1],
+                boxShadow: (theme) =>
+                  theme.palette.mode === 'dark' ? theme.customShadows.card.dark : theme.customShadows.card.light,
               }}
             >
               {/* Header */}
@@ -333,11 +376,11 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                         p: 2,
                         marginTop: 5,
                         borderRadius: (theme) => theme.shape.borderRadius * 2,
-                        bgcolor: 'background.paper',
+                        bgcolor: 'rgba(255,255,255,0.15)',
                         boxShadow: (theme) =>
                           theme.palette.mode === 'dark'
-                            ? 'inset 5px 5px 10px rgba(0,0,0,0.2), inset -5px -5px 10px rgba(255,255,255,0.05)'
-                            : 'inset 5px 5px 10px #d1d4d6, inset -5px -5px 10px #ffffff',
+                            ? theme.customShadows.hintBox.dark
+                            : theme.customShadows.hintBox.light,
                       }}
                     >
                       <Typography variant="h6" gutterBottom color="text.primary">
@@ -405,19 +448,11 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
         PaperProps={{
           sx: {
             bgcolor: 'background.paper',
+            width: 360,
           },
         }}
       >
-        <Box sx={{ width: 320, p: 3 }}>
-          <Typography variant="h6" gutterBottom color="text.primary">
-            Settings
-          </Typography>
-          <Divider sx={{ my: 2 }} />
-          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
-            Theme
-          </Typography>
-          <ThemeSelector currentTheme={currentTheme} onThemeChange={onThemeChange} />
-        </Box>
+        <ThemeSelector currentTheme={currentTheme} onThemeChange={onThemeChange} onClose={() => setDrawerOpen(false)} />
       </Drawer>
     </Box>
   );
