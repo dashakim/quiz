@@ -13,9 +13,13 @@ import {
   Avatar,
   Button,
   Grid2,
+  Divider,
+  useTheme,
 } from '@mui/material';
 import { VolumeUp, Settings, Grade, TrendingUp, Person } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import { themes } from './themes';
+import ThemeSelector from './ThemeSelector';
 
 const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
 
@@ -46,6 +50,7 @@ const words = [
 ];
 
 const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }) => {
+  const theme = useTheme();
   return (
     <motion.button
       whileHover={{ scale: disabled ? 1 : 1.03 }}
@@ -58,12 +63,16 @@ const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }
         marginTop: '5',
         fontSize: '1.1rem',
         fontWeight: 500,
-        border: '8px solid #ffffff',
-        borderRadius: '50px',
+        border: `25px solid ${theme.palette.background.paper}`,
+        borderRadius: theme.shape.borderRadius * theme.shape.borderRadiusMultipliers.button,
         cursor: disabled ? 'not-allowed' : 'pointer',
-        boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.1)',
-        color: correct || wrong ? '#000000' : '#000000',
-        background: correct ? '#b9cabc' : wrong ? '#e4d0d8' : 'rgba(239,239,239,0)',
+        boxShadow: theme.shadows[1],
+        color: theme.palette.text.primary,
+        background: correct
+          ? theme.palette.success.light
+          : wrong
+            ? theme.palette.error.light
+            : theme.palette.background.paper,
         textAlign: 'center',
         transition: 'all 0.3s ease',
       }}
@@ -73,40 +82,43 @@ const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }
   );
 };
 
-const ProgressRing = ({ progress }) => (
-  <Box sx={{ position: 'relative', width: 60, height: 60 }}>
-    <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
-      <path
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-        fill="none"
-        stroke="#eee"
-        strokeWidth="3"
-      />
-      <path
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-        fill="none"
-        stroke="#3498db"
-        strokeWidth="3"
-        strokeDasharray={`${progress}, 100`}
-      />
-    </svg>
-    <Typography
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        color: '#3498db',
-        // #f6f6f6
-        fontWeight: 700,
-      }}
-    >
-      {Math.round(progress)}%
-    </Typography>
-  </Box>
-);
+const ProgressRing = ({ progress }) => {
+  const theme = useTheme();
+  return (
+    <Box sx={{ position: 'relative', width: 60, height: 60 }}>
+      <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke={theme.palette.grey[200]}
+          strokeWidth="3"
+        />
+        <path
+          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke={theme.palette.primary.main}
+          strokeWidth="3"
+          strokeDasharray={`${progress}, 100`}
+        />
+      </svg>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: 'primary.main',
+          fontWeight: 700,
+        }}
+      >
+        {Math.round(progress)}%
+      </Typography>
+    </Box>
+  );
+};
 
-const QuizApp = () => {
+const QuizApp = ({ currentTheme, onThemeChange }) => {
+  const theme = useTheme();
   const [currentWord, setCurrentWord] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -143,8 +155,9 @@ const QuizApp = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f6f8fb 0%, #e9eef5 100%)',
+        bgcolor: 'background.default',
         py: 3,
+        transition: theme.transitions.create(['background-color']),
       }}
     >
       <Container maxWidth="lg">
@@ -159,17 +172,29 @@ const QuizApp = () => {
           <Card
             sx={{
               width: 280,
-              borderRadius: 4,
+              borderRadius: (theme) => theme.shape.borderRadius * 2,
               p: 3,
               display: { xs: 'none', md: 'flex' },
               flexDirection: 'column',
+              bgcolor: 'background.paper',
+              boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 1],
             }}
           >
             <Box sx={{ mb: 4, textAlign: 'center' }}>
-              <Avatar sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }} alt="User Sharp" src="/images/d.jpeg">
+              <Avatar
+                sx={{
+                  width: 80,
+                  height: 80,
+                  mx: 'auto',
+                  mb: 2,
+                  bgcolor: 'primary.light',
+                }}
+                alt="User Sharp"
+                src="/images/d.jpeg"
+              >
                 <Person />
               </Avatar>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom color="text.primary">
                 Daria Kim
               </Typography>
               <Typography color="text.secondary">Learning since 2024</Typography>
@@ -190,9 +215,25 @@ const QuizApp = () => {
                   key={cat}
                   button
                   selected={words[currentWord].category === cat}
-                  sx={{ borderRadius: 2, mb: 1 }}
+                  sx={{
+                    borderRadius: (theme) => theme.shape.borderRadius,
+                    mb: 1,
+                    '&.Mui-selected': {
+                      backgroundColor: 'primary.light',
+                      '&:hover': {
+                        backgroundColor: 'primary.light',
+                      },
+                    },
+                  }}
                 >
-                  <ListItemText primary={cat} />
+                  <ListItemText
+                    primary={cat}
+                    sx={{
+                      '.MuiListItemText-primary': {
+                        color: words[currentWord].category === cat ? 'common.white' : 'text.primary',
+                      },
+                    }}
+                  />
                 </ListItem>
               ))}
             </List>
@@ -202,12 +243,13 @@ const QuizApp = () => {
           <Box sx={{ flex: 1 }}>
             <Card
               sx={{
-                borderRadius: 4,
+                borderRadius: (theme) => theme.shape.borderRadius * 2,
                 overflow: 'hidden',
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                bgcolor: '#fff',
+                bgcolor: 'background.paper',
+                boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 1],
               }}
             >
               {/* Header */}
@@ -219,22 +261,23 @@ const QuizApp = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  bgcolor: 'background.paper',
                 }}
               >
                 <Box>
                   <Typography variant="overline" color="primary" sx={{ fontWeight: 600 }}>
                     {words[currentWord].category} • Level {words[currentWord].level}
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 800 }}>
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary' }}>
                     {words[currentWord].word}
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                  <IconButton>
+                  <IconButton sx={{ color: 'primary.main' }}>
                     <VolumeUp />
                   </IconButton>
-                  <IconButton onClick={() => setDrawerOpen(true)}>
+                  <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: 'primary.main' }}>
                     <Settings />
                   </IconButton>
                 </Box>
@@ -245,7 +288,8 @@ const QuizApp = () => {
                   p: 3,
                   flex: 1,
                   overflowY: 'auto',
-                  background: 'linear-gradient(135deg, #f6f8fb 0%, #e9eef5 100%)',
+                  background: (theme) => theme.palette.background.gradient,
+                  transition: theme.transitions.create(['background-color']),
                 }}
               >
                 <AnimatePresence mode="wait">
@@ -262,9 +306,9 @@ const QuizApp = () => {
                       image={words[currentWord].image}
                       alt={words[currentWord].word}
                       sx={{
-                        borderRadius: 1,
+                        borderRadius: (theme) => theme.shape.borderRadius,
                         mb: 4,
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                        boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 2],
                       }}
                     />
 
@@ -288,12 +332,15 @@ const QuizApp = () => {
                       sx={{
                         p: 2,
                         marginTop: 5,
-                        borderRadius: 5,
-                        // background: 'linear-gradient(145deg, #f8f9fa, #e9ecef)',
-                        boxShadow: 'inset 5px 5px 10px #d1d4d6, inset -5px -5px 10px #ffffff',
+                        borderRadius: (theme) => theme.shape.borderRadius * 2,
+                        bgcolor: 'background.paper',
+                        boxShadow: (theme) =>
+                          theme.palette.mode === 'dark'
+                            ? 'inset 5px 5px 10px rgba(0,0,0,0.2), inset -5px -5px 10px rgba(255,255,255,0.05)'
+                            : 'inset 5px 5px 10px #d1d4d6, inset -5px -5px 10px #ffffff',
                       }}
                     >
-                      <Typography variant="h6" gutterBottom>
+                      <Typography variant="h6" gutterBottom color="text.primary">
                         💡 {words[currentWord].hint}
                       </Typography>
                       <Typography sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
@@ -313,6 +360,7 @@ const QuizApp = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  bgcolor: 'background.paper',
                 }}
               >
                 <Box sx={{ display: 'flex', gap: 3 }}>
@@ -320,21 +368,28 @@ const QuizApp = () => {
                     <Typography color="text.secondary" variant="overline">
                       Score
                     </Typography>
-                    <Typography variant="h6">
-                      {score} <Grade sx={{ verticalAlign: 'middle', ml: 0.5 }} />
+                    <Typography variant="h6" color="text.primary">
+                      {score} <Grade sx={{ verticalAlign: 'middle', ml: 0.5, color: 'primary.main' }} />
                     </Typography>
                   </Box>
                   <Box>
                     <Typography color="text.secondary" variant="overline">
                       Streak
                     </Typography>
-                    <Typography variant="h6">
-                      {streak} <TrendingUp sx={{ verticalAlign: 'middle', ml: 0.5 }} />
+                    <Typography variant="h6" color="text.primary">
+                      {streak} <TrendingUp sx={{ verticalAlign: 'middle', ml: 0.5, color: 'primary.main' }} />
                     </Typography>
                   </Box>
                 </Box>
 
-                <Button variant="contained" size="large">
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    borderRadius: (theme) => theme.shape.borderRadius * 1.5,
+                    boxShadow: (theme) => theme.shadows[2],
+                  }}
+                >
                   Next Word
                 </Button>
               </Box>
@@ -343,11 +398,25 @@ const QuizApp = () => {
         </Box>
       </Container>
 
-      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        PaperProps={{
+          sx: {
+            bgcolor: 'background.paper',
+          },
+        }}
+      >
         <Box sx={{ width: 320, p: 3 }}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom color="text.primary">
             Settings
           </Typography>
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
+            Theme
+          </Typography>
+          <ThemeSelector currentTheme={currentTheme} onThemeChange={onThemeChange} />
         </Box>
       </Drawer>
     </Box>
