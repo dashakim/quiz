@@ -10,6 +10,7 @@ import {
   SmartToy,
   Gamepad,
   FormatClear,
+  ChangeHistory,
 } from '@mui/icons-material';
 
 const themeOptions = [
@@ -22,6 +23,7 @@ const themeOptions = [
   { name: 'Robot', value: 'robot', icon: SmartToy },
   { name: 'Retro', value: 'retro', icon: Gamepad },
   { name: 'Minimal', value: 'minimal', icon: FormatClear },
+  { name: 'Geometric', value: 'geometric', icon: ChangeHistory },
 ];
 
 const ThemeSelector = ({ currentTheme, onThemeChange }) => {

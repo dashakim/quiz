@@ -40,14 +40,6 @@ const getDesignTokens = (mode) => ({
         fontWeight: 600,
       },
     },
-    customShadows: {
-      card: '0 8px 32px rgba(0,0,0,0.1)',
-      button: '0 4px 6px rgba(52, 152, 219, 0.2)',
-      hintBox: {
-        light: 'inset 5px 5px 10px #d1d4d6, inset -5px -5px 10px #ffffff',
-        dark: 'inset 5px 5px 10px rgba(0,0,0,0.2), inset -5px -5px 10px rgba(255,255,255,0.05)',
-      },
-    },
     shape: {
       borderRadius: 5,
       borderRadiusMultipliers: {
@@ -59,7 +51,15 @@ const getDesignTokens = (mode) => ({
         image: 1.5,
       },
     },
-
+    customShadows: {
+      card: 'none',
+      button: 'none',
+      hintBox: {
+        light: 'inset 0 0 8px rgba(0, 0, 0, 0.15)',
+        dark: 'inset 0 0 8px rgba(0, 0, 0, 0.3)',
+      },
+      image: 'none',
+    },
     components: {
       MuiCard: {
         styleOverrides: {
@@ -69,15 +69,7 @@ const getDesignTokens = (mode) => ({
           },
         },
       },
-      customShadows: {
-        card: 'none',
-        button: 'none',
-        hintBox: {
-          light: 'none',
-          dark: 'none',
-        },
-        image: 'none',
-      },
+
       MuiButton: {
         styleOverrides: {
           root: {
@@ -786,6 +778,123 @@ const getDesignTokens = (mode) => ({
       },
     },
   },
+  geometric: {
+    palette: {
+      mode: 'light',
+      primary: {
+        main: '#6366F1',
+        light: '#818CF8',
+        dark: '#4F46E5',
+      },
+      background: {
+        default: '#F8FAFC',
+        paper: '#FFFFFF',
+        gradient: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+        card: '#FFFFFF',
+      },
+      text: {
+        primary: '#1E293B',
+        secondary: '#64748B',
+      },
+    },
+    shape: {
+      borderRadius: 6,
+      borderRadiusMultipliers: {
+        card: 2,
+        button: 3,
+        selectionButton: 2,
+        listItem: 1.5,
+        hintBox: 2,
+        image: 1.5,
+      },
+    },
+    typography: {
+      fontFamily: '"Space Grotesk", "Roboto", "Helvetica", sans-serif',
+      h1: {
+        fontWeight: 700,
+      },
+      h4: {
+        fontWeight: 600,
+      },
+      button: {
+        fontWeight: 500,
+      },
+    },
+    components: {
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            position: 'relative',
+            overflow: 'visible',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: -8,
+              left: -8,
+              right: -8,
+              bottom: -8,
+              background: 'linear-gradient(45deg, #6366F1 0%, #818CF8 100%)',
+              borderRadius: 'inherit',
+              opacity: 0.1,
+              zIndex: -1,
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              width: 40,
+              height: 40,
+              top: -20,
+              right: -20,
+              background: '#6366F1',
+              borderRadius: '0 50% 50% 50%',
+              transform: 'rotate(45deg)',
+              opacity: 0.2,
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.1'%3E%3Cpolygon points='0,0 2,0 2,2 0,2'/%3E%3C/g%3E%3C/svg%3E")`,
+              opacity: 0.5,
+            },
+          }),
+          contained: {
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0 8px 16px rgba(99, 102, 241, 0.2)',
+            },
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366F1' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          },
+        },
+      },
+    },
+    customShadows: {
+      card: '0 20px 40px rgba(99, 102, 241, 0.1)',
+      button: '0 4px 12px rgba(99, 102, 241, 0.2)',
+      hintBox: {
+        light: 'inset 2px 2px 5px rgba(99, 102, 241, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.8)',
+        dark: 'inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.1)',
+      },
+      image: '0 12px 24px rgba(99, 102, 241, 0.15)',
+    },
+  },
 });
 
 export const themes = {
@@ -798,4 +907,5 @@ export const themes = {
   robot: createTheme(getDesignTokens().robot),
   retro: createTheme(getDesignTokens().retro),
   minimal: createTheme(getDesignTokens().minimal),
+  geometric: createTheme(getDesignTokens().geometric),
 };

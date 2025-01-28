@@ -13,14 +13,14 @@ import {
   Avatar,
   Button,
   Grid2,
-  Divider,
+  Tooltip,
+  Stack,
   useTheme,
 } from '@mui/material';
 import { VolumeUp, Settings, Grade, TrendingUp, Person } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeSelector from './ThemeSelector';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Fab, Tooltip, Stack } from '@mui/material';
-import { Palette, DarkMode, LightMode, FormatSize } from '@mui/icons-material';
+import { Palette, DarkMode, LightMode } from '@mui/icons-material';
 
 const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
 
@@ -61,7 +61,7 @@ const words = [
   {
     id: 1,
     word: 'café',
-    image: '/images/mao.png',
+    image: '/images/cafe.webp',
     translation: 'coffee',
     options: ['tea', 'coffee', 'water', 'milk'],
     category: 'Food',
@@ -93,11 +93,11 @@ const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }
       disabled={disabled}
       style={{
         width: '100%',
-        padding: '20px 20px',
+        padding: '20px 10px',
         marginTop: '5',
         fontSize: '1.1rem',
         fontWeight: 500,
-        border: `25px solid ${theme.palette.background.paper}`,
+        border: `15px solid ${theme.palette.background.paper}`,
         borderRadius: theme.shape.borderRadius * theme.shape.borderRadiusMultipliers.button,
         cursor: disabled ? 'not-allowed' : 'pointer',
         boxShadow: theme.shadows[1],
@@ -207,7 +207,7 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
           sx={{
             display: 'flex',
             gap: 4,
-            height: 'calc(100vh - 48px)',
+            height: 'calc(70vh - 48px)',
           }}
         >
           {/* Sidebar */}
@@ -241,7 +241,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
               </Typography>
               <Typography color="text.secondary">Learning since 2024</Typography>
             </Box>
-
             <Box sx={{ mb: 4 }}>
               <Typography variant="overline" color="text.secondary">
                 Progress
@@ -250,7 +249,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                 <ProgressRing progress={progress} />
               </Box>
             </Box>
-
             <List>
               {categories.map((cat) => (
                 <ListItem
@@ -345,7 +343,7 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                   >
                     <CardMedia
                       component="img"
-                      height="400"
+                      height="300"
                       image={words[currentWord].image}
                       alt={words[currentWord].word}
                       sx={{
