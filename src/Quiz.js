@@ -22,7 +22,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ThemeSelector from './ThemeSelector';
 import { Palette, DarkMode, LightMode } from '@mui/icons-material';
 
-const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
+const categories = ['Food', 'People', 'City', 'Verbs', 'Articles'];
 
 const SettingsBar = ({ onThemeClick, onVolumeClick, isDark, onToggleDark }) => (
   <Stack
@@ -270,7 +270,7 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                     primary={cat}
                     sx={{
                       '.MuiListItemText-primary': {
-                        color: words[currentWord].category === cat ? 'common.white' : 'text.primary',
+                        color: words[currentWord].category === cat ? 'common.dark' : 'text.primary',
                       },
                     }}
                   />
