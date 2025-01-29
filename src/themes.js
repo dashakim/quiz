@@ -65,7 +65,7 @@ const getDesignTokens = (mode) => ({
         styleOverrides: {
           root: {
             boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-            borderRadius: 216,
+            borderRadius: 2,
           },
         },
       },
@@ -895,6 +895,180 @@ const getDesignTokens = (mode) => ({
       image: '0 12px 24px rgba(99, 102, 241, 0.15)',
     },
   },
+  languageHub: {
+    palette: {
+      mode: 'light',
+      primary: {
+        main: '#7C3AED',
+        light: '#9F67FF',
+        dark: '#5B21B6',
+        green: '#2dc866',
+        lightGreen: '#ddfbe8',
+        lightBlue: '#ddebff',
+        actionBlue: '#4588f6',
+        magenta: '#ac5df7',
+      },
+      secondary: {
+        main: '#10B981',
+        light: '#34D399',
+        dark: '#059669',
+      },
+      success: {
+        main: '#10B981',
+        light: '#6EE7B7',
+        dark: '#059669',
+      },
+      background: {
+        default: '#F8FAFC',
+        paper: '#FFFFFF',
+        gradient: 'linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%)',
+        card: '#FFFFFF',
+        accent: 'linear-gradient(135deg, #7C3AED 0%, #9F67FF 100%)',
+      },
+      text: {
+        primary: '#1E293B',
+        secondary: '#64748B',
+      },
+      learning: {
+        beginner: '#4ADE80',
+        intermediate: '#3B82F6',
+        advanced: '#8B5CF6',
+        card: {
+          practice: '#F0FDF4',
+          garden: '#F0F9FF',
+          time: '#FDF4FF',
+          kitchen: '#FFF7ED',
+        },
+        icons: {
+          practice: '#22C55E',
+          garden: '#0EA5E9',
+          time: '#D946EF',
+          kitchen: '#F97316',
+        },
+      },
+    },
+    typography: {
+      fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+      h1: {
+        fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        fontWeight: 800,
+        letterSpacing: '-0.02em',
+      },
+      h4: {
+        fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        fontWeight: 700,
+        letterSpacing: '-0.01em',
+      },
+      h6: {
+        fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        fontWeight: 600,
+        letterSpacing: '-0.01em',
+      },
+      button: {
+        fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        fontWeight: 600,
+        textTransform: 'none',
+      },
+      overline: {
+        fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        fontWeight: 600,
+        textTransform: 'uppercase',
+        letterSpacing: '0.1em',
+      },
+    },
+    shape: {
+      borderRadius: 16,
+      borderRadiusMultipliers: {
+        card: 1.5,
+        button: 1.25,
+        pill: 3,
+        circle: 100,
+      },
+    },
+    components: {
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            boxShadow: '0px 4px 25px rgba(0, 0, 0, 0.06)',
+            transition: 'all 0.3s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.08)',
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 12,
+            padding: '10px 20px',
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+            },
+          },
+          contained: {
+            boxShadow: '0px 4px 12px rgba(124, 58, 237, 0.15)',
+            '&:hover': {
+              boxShadow: '0px 8px 16px rgba(124, 58, 237, 0.2)',
+            },
+          },
+          outlined: {
+            borderWidth: 2,
+            '&:hover': {
+              borderWidth: 2,
+            },
+          },
+        },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            fontWeight: 600,
+            fontSize: '1rem',
+            minWidth: 120,
+            '&.Mui-selected': {
+              color: '#7C3AED',
+            },
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            fontWeight: 600,
+            '&.level-beginner': {
+              backgroundColor: '#F0FDF4',
+              color: '#22C55E',
+            },
+            '&.level-intermediate': {
+              backgroundColor: '#EFF6FF',
+              color: '#3B82F6',
+            },
+            '&.level-advanced': {
+              backgroundColor: '#F5F3FF',
+              color: '#8B5CF6',
+            },
+          },
+        },
+      },
+    },
+    customShadows: {
+      card: '0px 4px 25px rgba(0, 0, 0, 0.06)',
+      cardHover: '0px 12px 30px rgba(0, 0, 0, 0.08)',
+      button: '0px 4px 12px rgba(124, 58, 237, 0.15)',
+      buttonHover: '0px 8px 16px rgba(124, 58, 237, 0.2)',
+      level: {
+        beginner: '0px 4px 12px rgba(34, 197, 94, 0.15)',
+        intermediate: '0px 4px 12px rgba(59, 130, 246, 0.15)',
+        advanced: '0px 4px 12px rgba(139, 92, 246, 0.15)',
+      },
+    },
+  },
 });
 
 export const themes = {
@@ -908,4 +1082,5 @@ export const themes = {
   retro: createTheme(getDesignTokens().retro),
   minimal: createTheme(getDesignTokens().minimal),
   geometric: createTheme(getDesignTokens().geometric),
+  languageHub: createTheme(getDesignTokens().languageHub),
 };
