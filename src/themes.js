@@ -899,9 +899,9 @@ const getDesignTokens = (mode) => ({
     palette: {
       mode: 'light',
       primary: {
-        main: '#7C3AED',
-        light: '#9F67FF',
-        dark: '#5B21B6',
+        main: '#4588f6',
+        light: '#6780ff',
+        dark: '#4588f6',
         green: '#2dc866',
         lightGreen: '#ddfbe8',
         lightBlue: '#ddebff',
@@ -990,11 +990,11 @@ const getDesignTokens = (mode) => ({
         styleOverrides: {
           root: {
             borderRadius: 8,
-            boxShadow: '0px 4px 25px rgba(0, 0, 0, 0.06)',
-            transition: 'all 0.3s ease-in-out',
+            // boxShadow: '0px 4px 25px rgba(0, 0, 0, 0.06)',
+            // transition: 'all 0.3s ease-in-out',
             '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.08)',
+              // transform: 'translateY(-4px)',
+              // boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.08)',
             },
           },
         },
@@ -1031,7 +1031,7 @@ const getDesignTokens = (mode) => ({
             fontSize: '1rem',
             minWidth: 120,
             '&.Mui-selected': {
-              color: '#7C3AED',
+              color: '#144697',
             },
           },
         },

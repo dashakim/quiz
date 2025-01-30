@@ -163,7 +163,19 @@ const WordForm = () => {
   }
 
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 3 }}>
+    <Box
+      sx={{
+        bgcolor: 'background.default',
+        minHeight: '100vh',
+        py: 2,
+        px: 2,
+        m: 3,
+        position: 'relative',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        width: '100%',
+      }}
+    >
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)}>
           {categories.map((category) => (
