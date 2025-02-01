@@ -104,10 +104,10 @@ const getDesignTokens = (mode) => ({
       },
 
       background: {
-        default: '#1a1a1a',
-        paper: '#2d2d2d',
+        default: '#676767',
+        paper: '#494949',
         gradient: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-        card: '#2d2d2d',
+        card: '#515151',
       },
       text: {
         primary: '#ffffff',
@@ -115,7 +115,7 @@ const getDesignTokens = (mode) => ({
       },
     },
     shape: {
-      borderRadius: 4,
+      borderRadius: 2,
       borderRadiusMultipliers: {
         card: 7.75,
         button: 33,
@@ -139,7 +139,7 @@ const getDesignTokens = (mode) => ({
         styleOverrides: {
           root: {
             boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-            borderRadius: 16,
+            borderRadius: 1,
             backgroundColor: '#2d2d2d',
           },
         },
@@ -147,9 +147,9 @@ const getDesignTokens = (mode) => ({
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: 35,
+            borderRadius: 5,
             textTransform: 'none',
-            fontWeight: 600,
+            fontWeight: 500,
           },
           contained: {
             boxShadow: '0 4px 6px rgba(144, 202, 249, 0.2)',
@@ -961,23 +961,23 @@ const getDesignTokens = (mode) => ({
       },
       h6: {
         fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
-        fontWeight: 600,
+        fontWeight: 500,
         letterSpacing: '-0.01em',
       },
       button: {
         fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
-        fontWeight: 600,
+        fontWeight: 500,
         textTransform: 'none',
       },
       overline: {
         fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
-        fontWeight: 600,
+        fontWeight: 500,
         textTransform: 'uppercase',
         letterSpacing: '0.1em',
       },
     },
     shape: {
-      borderRadius: 16,
+      borderRadius: 3,
       borderRadiusMultipliers: {
         card: 1.5,
         button: 1.25,

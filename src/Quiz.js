@@ -30,13 +30,12 @@ const SettingsBar = ({ onThemeClick, onVolumeClick, isDark, onToggleDark }) => (
     spacing={1}
     sx={{
       position: 'fixed',
-      top: 16,
-      right: 16,
+      top: 110,
+      right: 350,
       zIndex: 1000,
       bgcolor: 'background.paper',
       borderRadius: 'pill',
       p: 1,
-      boxShadow: 3,
     }}
   >
     <Tooltip title="Change Theme">
@@ -93,11 +92,11 @@ const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }
       disabled={disabled}
       style={{
         width: '100%',
-        padding: '20px 10px',
-        marginTop: '5',
+        padding: '10px 10px',
+        marginTop: '35',
         fontSize: '1.1rem',
         fontWeight: 500,
-        border: `15px solid ${theme.palette.background.paper}`,
+        border: `10px solid ${theme.palette.background.paper}`,
         borderRadius: theme.shape.borderRadius * theme.shape.borderRadiusMultipliers.button,
         cursor: disabled ? 'not-allowed' : 'pointer',
         boxShadow: theme.shadows[1],
@@ -207,7 +206,7 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
           sx={{
             display: 'flex',
             gap: 4,
-            height: 'calc(70vh - 48px)',
+            height: 'calc(90vh - 48px)',
           }}
         >
           {/* Sidebar */}
@@ -289,8 +288,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 bgcolor: 'background.paper',
-                boxShadow: (theme) =>
-                  theme.palette.mode === 'dark' ? theme.customShadows.card.dark : theme.customShadows.card.light,
               }}
             >
               {/* Header */}
@@ -375,10 +372,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                         marginTop: 5,
                         borderRadius: (theme) => theme.shape.borderRadius * 2,
                         bgcolor: 'rgba(255,255,255,0.15)',
-                        boxShadow: (theme) =>
-                          theme.palette.mode === 'dark'
-                            ? theme.customShadows.hintBox.dark
-                            : theme.customShadows.hintBox.light,
                       }}
                     >
                       <Typography variant="h6" gutterBottom color="text.primary">

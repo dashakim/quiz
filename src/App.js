@@ -25,48 +25,76 @@ import '@fontsource/plus-jakarta-sans/700.css';
 import '@fontsource/plus-jakarta-sans/800.css';
 import Header from './Header';
 import HeaderVideo from './HeaderVideo';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Quiz from './Quiz';
+import WordForm from './WordForm';
+import LearningHub from './LearningHub';
+import { Box } from '@mui/material';
 
 function App() {
-  const [currentTheme, setCurrentTheme] = useState('default');
-  const [currentView, setCurrentView] = useState('hub');
-  const [globalTheme, setGlobalTheme] = useState(themes[currentTheme]);
+  const [appTheme, setAppTheme] = useState('languageHub');
+  const [quizTheme, setQuizTheme] = useState('default');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('quizAppTheme');
-    if (savedTheme && themes[savedTheme]) {
-      setCurrentTheme(savedTheme);
-      setGlobalTheme(themes[savedTheme]);
+    const savedQuizTheme = localStorage.getItem('quizAppTheme');
+    if (savedQuizTheme && themes[savedQuizTheme]) {
+      setQuizTheme(savedQuizTheme);
     }
   }, []);
 
-  const handleThemeChange = (newTheme) => {
-    setCurrentTheme(newTheme);
-    setGlobalTheme(themes[newTheme]);
-    localStorage.setItem('quizAppTheme', newTheme);
+  const handleQuizThemeChange = (newTheme) => {
+    if (themes[newTheme]) {
+      setQuizTheme(newTheme);
+      localStorage.setItem('quizAppTheme', newTheme);
+    }
   };
 
-  const getActiveTheme = () => {
-    if (currentView === 'hub') {
-      console.log(currentTheme);
-      console.log(currentView);
+  const getActiveTheme = (pathname) => {
+    if (pathname === '/quiz') {
+      return themes[quizTheme];
+    }
+    if (pathname === '/learning-hub') {
       return createTheme({
-        ...globalTheme,
+        ...themes[appTheme],
         ...themes.languageHub,
         components: {
-          ...globalTheme.components,
+          ...themes[appTheme].components,
           ...themes.languageHub.components,
         },
       });
     }
-    return globalTheme;
+    return themes[appTheme];
+  };
+
+  const AppContent = () => {
+    const location = useLocation();
+    const currentTheme = getActiveTheme(location.pathname);
+
+    return (
+      <ThemeProvider theme={currentTheme}>
+        <CssBaseline />
+        <Box
+          sx={{
+            minHeight: '100vh',
+            pt: location.pathname === '/' ? 0 : { xs: '56px', sm: '64px' },
+          }}
+        >
+          <Header />
+          <Routes>
+            <Route path="/" element={<HeaderVideo />} />
+            <Route path="/learning-hub" element={<LearningHub />} />
+            <Route path="/quiz" element={<Quiz currentTheme={quizTheme} onThemeChange={handleQuizThemeChange} />} />
+            <Route path="/words" element={<WordForm />} />
+          </Routes>
+        </Box>
+      </ThemeProvider>
+    );
   };
 
   return (
-    <ThemeProvider theme={getActiveTheme()}>
-      <CssBaseline />
-      <Header />
-      <HeaderVideo />
-    </ThemeProvider>
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

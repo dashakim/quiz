@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -19,6 +20,7 @@ import {
   Fade,
   alpha,
   styled,
+  useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -26,6 +28,8 @@ import LoginIcon from '@mui/icons-material/Login';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CloseIcon from '@mui/icons-material/Close';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { Palette } from '@mui/icons-material';
+import { themes } from './themes';
 
 const MemorifyLogo = styled(Typography)(({ theme }) => ({
   fontSize: '2rem',
@@ -42,11 +46,14 @@ const MemorifyLogo = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const Header = () => {
+const Header = ({ currentTheme, onThemeChange }) => {
+  const navigate = useNavigate();
+  const theme = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(null);
   const [menuAnchors, setMenuAnchors] = useState({});
+  const [themeMenu, setThemeMenu] = useState(null); // Added missing state
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,18 +68,29 @@ const Header = () => {
       title: 'Learning Hub',
       description: 'Start your learning journey here',
       icon: '🎓',
+      path: '/learning-hub',
     },
     {
       title: 'Quiz',
       description: 'Test your knowledge',
       icon: '✍️',
+      path: '/quiz',
     },
     {
       title: 'Word Management',
       description: 'Manage your vocabulary',
       icon: '📚',
+      path: '/words',
     },
   ];
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(null);
+    }
+    setMenuAnchors({});
+  };
 
   const handleMenuHover = (event, key) => {
     setMenuAnchors((prev) => ({
@@ -88,6 +106,21 @@ const Header = () => {
     }));
   };
 
+  const handleThemeMenuOpen = (event) => {
+    setThemeMenu(event.currentTarget);
+  };
+
+  const handleThemeMenuClose = () => {
+    setThemeMenu(null);
+  };
+
+  const handleThemeSelect = (themeName) => {
+    if (onThemeChange) {
+      onThemeChange(themeName);
+    }
+    handleThemeMenuClose();
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -95,7 +128,7 @@ const Header = () => {
       sx={{
         background: scrolled ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.5)',
         backdropFilter: 'blur(10px)',
-        transition: 'all 0.3s',
+        transition: 'all 0.3s ease',
         borderBottom: '1px solid',
         borderColor: scrolled ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)',
       }}
@@ -112,7 +145,7 @@ const Header = () => {
           width: '100%',
         }}
       >
-        <MemorifyLogo>Memorify</MemorifyLogo>
+        <MemorifyLogo onClick={() => handleNavigation('/')}>Memorify</MemorifyLogo>
         <Box
           sx={{
             display: { xs: 'none', md: 'flex' },
@@ -125,6 +158,7 @@ const Header = () => {
               <Button
                 onMouseEnter={(e) => handleMenuHover(e, item.title)}
                 onMouseLeave={() => handleMenuClose(item.title)}
+                onClick={() => handleNavigation(item.path)}
                 sx={{
                   color: 'text.primary',
                   textTransform: 'none',
@@ -229,6 +263,20 @@ const Header = () => {
           <IconButton onClick={(e) => setMobileMenuOpen(e.currentTarget)} sx={{ color: 'text.primary' }}>
             <MenuIcon />
           </IconButton>
+          <IconButton onClick={handleThemeMenuOpen} sx={{ ml: 1 }}>
+            <Palette />
+          </IconButton>
+          <Menu anchorEl={themeMenu} open={Boolean(themeMenu)} onClose={handleThemeMenuClose}>
+            {Object.keys(themes).map((themeName) => (
+              <MenuItem
+                key={themeName}
+                selected={currentTheme === themeName}
+                onClick={() => handleThemeSelect(themeName)}
+              >
+                {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+              </MenuItem>
+            ))}
+          </Menu>
           <Menu
             anchorEl={mobileMenuOpen}
             open={Boolean(mobileMenuOpen)}
@@ -261,7 +309,7 @@ const Header = () => {
             {menuItems.map((item) => (
               <MenuItem
                 key={item.title}
-                onClick={() => setMobileMenuOpen(null)}
+                onClick={() => handleNavigation(item.path)}
                 sx={{
                   py: 1.5,
                   px: 2,
@@ -353,7 +401,7 @@ const Header = () => {
                   color: 'text.secondary',
                 }}
               >
-                Don't have an account?{' '}
+                Don't have an account?
                 <Button
                   variant="text"
                   sx={{

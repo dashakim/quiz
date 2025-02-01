@@ -1,7 +1,13 @@
 import React from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderVideo = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/learning-hub');
+  };
   return (
     <Box
       sx={{
@@ -79,6 +85,7 @@ const HeaderVideo = () => {
           Enhance your learning journey with advanced memory techniques
         </Typography>
         <Button
+          onClick={handleGetStarted}
           variant="contained"
           size="large"
           sx={{
