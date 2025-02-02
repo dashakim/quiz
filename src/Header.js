@@ -385,7 +385,7 @@ const Header = ({ currentTheme, onThemeChange }) => {
                 size="large"
                 sx={{
                   mt: 1,
-                  background: 'linear-gradient(to right, #9333ea, #3b82f6)',
+                  background: 'linear-gradient(to right, #d58d8d, #a78bfa)',
                   textTransform: 'none',
                   '&:hover': {
                     background: 'linear-gradient(to right, #7e22ce, #2563eb)',

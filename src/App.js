@@ -30,6 +30,7 @@ import Quiz from './Quiz';
 import WordForm from './WordForm';
 import LearningHub from './LearningHub';
 import { Box } from '@mui/material';
+import Footer from './components/Footer';
 
 function App() {
   const [appTheme, setAppTheme] = useState('languageHub');
@@ -75,7 +76,7 @@ function App() {
         <CssBaseline />
         <Box
           sx={{
-            minHeight: '100vh',
+            minHeight: '90vh',
             pt: location.pathname === '/' ? 0 : { xs: '56px', sm: '64px' },
           }}
         >
@@ -86,6 +87,7 @@ function App() {
             <Route path="/quiz" element={<Quiz currentTheme={quizTheme} onThemeChange={handleQuizThemeChange} />} />
             <Route path="/words" element={<WordForm />} />
           </Routes>
+          <Footer />
         </Box>
       </ThemeProvider>
     );

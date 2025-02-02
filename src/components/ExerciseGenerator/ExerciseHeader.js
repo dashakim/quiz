@@ -9,7 +9,7 @@ const ExerciseHeader = ({
   generateNewExercise,
 }) => (
   <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-    <Typography variant="h6">Practice Generator 🎯</Typography>
+    <Typography variant="h6">Practice Generator</Typography>
     <Stack direction="row" spacing={2}>
       <FormControl sx={{ minWidth: 120 }}>
         <InputLabel>Level</InputLabel>
@@ -36,7 +36,7 @@ const ExerciseHeader = ({
           variant="contained"
           onClick={generateNewExercise}
           sx={{
-            bgcolor: 'primary.actionBlue',
+            bgcolor: '#a78bfa',
             '&:hover': { bgcolor: 'primary.actionBlue' },
           }}
         >

@@ -8,6 +8,13 @@ const getDesignTokens = (mode) => ({
         main: '#3498db',
         light: '#5dade2',
         dark: '#2980b9',
+        sec: '#d58d8c',
+        d: '#a78bfa',
+        k: '#1E90FF',
+        k2: '#00CED1',
+        k3: '#6A0DAD',
+        k4: '#FF007F',
+        gradient: 'linear-gradient(to right, #d58d8d, #a78bfa)',
       },
       background: {
         default: '#f6f8fb',
