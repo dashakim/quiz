@@ -53,11 +53,12 @@ const LearningHub = () => {
                 startIcon="🇧🇷"
                 sx={{
                   borderRadius: '24px',
-                  bgcolor: currentLanguage === 'portuguese' ? 'primary.green' : 'grey.100',
+                  background:
+                    currentLanguage === 'portuguese' ? 'linear-gradient(to right, #d58d8d, #a78bfa)' : 'grey.100',
                   color: currentLanguage === 'portuguese' ? 'common.white' : 'text.primary',
                   border: 'none',
                   '&:hover': {
-                    bgcolor: currentLanguage === 'portuguese' ? 'primary.green' : 'grey.200',
+                    bgcolor: currentLanguage === 'portuguese' ? 'grey:700' : 'grey.200',
                     border: 'none',
                   },
                 }}
@@ -70,11 +71,12 @@ const LearningHub = () => {
                 startIcon="🇬🇧"
                 sx={{
                   borderRadius: '24px',
-                  bgcolor: currentLanguage === 'english' ? 'primary.green' : 'grey.100',
+                  background:
+                    currentLanguage === 'english' ? 'linear-gradient(to right, #d58d8d, #a78bfa)' : 'grey.100',
                   color: currentLanguage === 'english' ? 'common.white' : 'text.primary',
                   border: 'none',
                   '&:hover': {
-                    bgcolor: currentLanguage === 'english' ? 'primary.green' : 'grey.200',
+                    bgcolor: currentLanguage === 'english' ? 'grey:700' : 'grey.200',
                     border: 'none',
                   },
                 }}
@@ -113,7 +115,7 @@ const LearningHub = () => {
               </Card>
             )}
           </CardContent>
-          <PracticeHistory />
+          {/*<PracticeHistory />*/}
           <Grid2 container spacing={2}>
             {['Daily Routines', 'Travel', 'Food & Dining', 'Business'].map((category) => (
               <Grid2 item xs={12} size={6} key={category}>
@@ -136,52 +138,52 @@ const LearningHub = () => {
       {activeTab === 1 && <WordGardenSection />}
       {activeTab === 2 && <TimeMachineSection />}
       {activeTab === 3 && <WordKitchenSection />}
-      <Zoom in={true} timeout={500}>
-        <Fab
-          variant="extended"
-          sx={{
-            position: 'fixed',
-            bottom: { xs: 16, md: 32 },
-            right: { xs: 16, md: 32 },
-            height: 48,
-            minWidth: 48,
-            transition: '0.3s all',
-            boxShadow: (theme) => theme.shadows[4],
-            bgcolor: 'primary.green',
-            color: 'common.white',
-            '&:hover': {
-              bgcolor: 'primary.dark',
-              transform: 'translateY(-2px)',
-              boxShadow: (theme) => theme.shadows[8],
-            },
-            '& .MuiSvgIcon-root': {
-              color: 'common.white',
-              transition: '0.2s all',
-            },
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ px: 1 }}>
-            <Mic
-              sx={{
-                fontSize: 24,
-                transform: 'scale(1)',
-                '&:hover': {
-                  transform: 'scale(1.1)',
-                },
-              }}
-            />
-            <Typography
-              sx={{
-                display: { xs: 'none', sm: 'block' },
-                fontWeight: 500,
-                letterSpacing: '0.5px',
-              }}
-            >
-              Start Speaking Practice
-            </Typography>
-          </Stack>
-        </Fab>
-      </Zoom>
+      {/*<Zoom in={true} timeout={500}>*/}
+      {/*<Fab*/}
+      {/*  variant="extended"*/}
+      {/*  sx={{*/}
+      {/*    position: 'fixed',*/}
+      {/*    bottom: { xs: 16, md: 32 },*/}
+      {/*    right: { xs: 16, md: 32 },*/}
+      {/*    height: 48,*/}
+      {/*    minWidth: 48,*/}
+      {/*    transition: '0.3s all',*/}
+      {/*    boxShadow: (theme) => theme.shadows[4],*/}
+      {/*    background: '#d58d8c',*/}
+      {/*    color: 'common.white',*/}
+      {/*    '&:hover': {*/}
+      {/*      bgcolor: 'primary.dark',*/}
+      {/*      transform: 'translateY(-2px)',*/}
+      {/*      boxShadow: (theme) => theme.shadows[8],*/}
+      {/*    },*/}
+      {/*    '& .MuiSvgIcon-root': {*/}
+      {/*      color: 'common.white',*/}
+      {/*      transition: '0.2s all',*/}
+      {/*    },*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*<Stack direction="row" spacing={1} alignItems="center" sx={{ px: 1 }}>*/}
+      {/*  <Mic*/}
+      {/*    sx={{*/}
+      {/*      fontSize: 24,*/}
+      {/*      transform: 'scale(1)',*/}
+      {/*      '&:hover': {*/}
+      {/*        transform: 'scale(1.1)',*/}
+      {/*      },*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*  <Typography*/}
+      {/*    sx={{*/}
+      {/*      display: { xs: 'none', sm: 'block' },*/}
+      {/*      fontWeight: 500,*/}
+      {/*      letterSpacing: '0.5px',*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    Start Speaking Practice*/}
+      {/*  </Typography>*/}
+      {/*</Stack>*/}
+      {/*</Fab>*/}
+      {/*</Zoom>*/}
     </Box>
   );
 };

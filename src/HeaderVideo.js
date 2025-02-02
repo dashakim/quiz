@@ -12,7 +12,7 @@ const HeaderVideo = () => {
     <Box
       sx={{
         position: 'relative',
-        height: '100vh',
+        height: '90vh',
         width: '100%',
         overflow: 'hidden',
         mt: { xs: '56px', sm: '64px' },
