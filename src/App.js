@@ -77,7 +77,7 @@ function App() {
         <Box
           sx={{
             minHeight: '90vh',
-            pt: location.pathname === '/' ? 0 : { xs: '56px', sm: '64px' },
+            pt: location.pathname === '/' ? 0 : '64px',
           }}
         >
           <Header />
