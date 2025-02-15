@@ -25,9 +25,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import LoginIcon from '@mui/icons-material/Login';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import CloseIcon from '@mui/icons-material/Close';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import CloseIcon from '@mui/icons-material/Close';
 import { Palette } from '@mui/icons-material';
 import { themes } from './themes';
 
@@ -46,6 +45,22 @@ const MemorifyLogo = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const StableAppBar = styled(AppBar)(({ theme, scrolled }) => ({
+  background: scrolled ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.5)',
+  backdropFilter: 'blur(10px)',
+  transition: 'background 0.3s ease, border-color 0.3s ease',
+  borderBottom: '1px solid',
+  borderColor: scrolled ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+  height: '64px',
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: theme.zIndex.drawer + 2,
+  transform: 'translateZ(0)',
+  willChange: 'transform',
+}));
+
 const Header = ({ currentTheme, onThemeChange }) => {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -53,7 +68,7 @@ const Header = ({ currentTheme, onThemeChange }) => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(null);
   const [menuAnchors, setMenuAnchors] = useState({});
-  const [themeMenu, setThemeMenu] = useState(null); // Added missing state
+  const [themeMenu, setThemeMenu] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,17 +137,7 @@ const Header = ({ currentTheme, onThemeChange }) => {
   };
 
   return (
-    <AppBar
-      position="fixed"
-      elevation={scrolled ? 1 : 0}
-      sx={{
-        background: scrolled ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.5)',
-        backdropFilter: 'blur(10px)',
-        transition: 'all 0.3s ease',
-        borderBottom: '1px solid',
-        borderColor: scrolled ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-      }}
-    >
+    <StableAppBar elevation={scrolled ? 1 : 0} scrolled={scrolled}>
       <Box
         sx={{
           maxWidth: 1200,
@@ -143,18 +148,21 @@ const Header = ({ currentTheme, onThemeChange }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
+          height: '100%',
         }}
       >
         <MemorifyLogo onClick={() => handleNavigation('/')}>Memorify</MemorifyLogo>
+
         <Box
           sx={{
             display: { xs: 'none', md: 'flex' },
             gap: 4,
             alignItems: 'center',
+            height: '100%',
           }}
         >
           {menuItems.map((item) => (
-            <Box key={item.title}>
+            <Box key={item.title} sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
               <Button
                 onMouseEnter={(e) => handleMenuHover(e, item.title)}
                 onMouseLeave={() => handleMenuClose(item.title)}
@@ -165,9 +173,14 @@ const Header = ({ currentTheme, onThemeChange }) => {
                   fontSize: '1rem',
                   fontWeight: 500,
                   px: 2,
+                  height: '100%',
+                  transition: 'none !important',
+                  transform: 'none !important',
+                  '& *': { transition: 'none !important' },
                   '&:hover': {
                     background: 'transparent',
                     color: 'primary.main',
+                    transform: 'none !important',
                   },
                 }}
               >
@@ -208,6 +221,7 @@ const Header = ({ currentTheme, onThemeChange }) => {
             display: { xs: 'none', md: 'flex' },
             gap: 2,
             alignItems: 'center',
+            height: '100%',
           }}
         >
           <TextField
@@ -417,7 +431,7 @@ const Header = ({ currentTheme, onThemeChange }) => {
           </DialogContent>
         </Dialog>
       </Box>
-    </AppBar>
+    </StableAppBar>
   );
 };
 
