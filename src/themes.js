@@ -80,6 +80,11 @@ const getDesignTokens = (mode) => ({
       MuiButton: {
         styleOverrides: {
           root: {
+            transition: 'none !important',
+            transform: 'none !important',
+            '&:hover': {
+              transform: 'none !important',
+            },
             borderRadius: 85,
             textTransform: 'none',
             fontWeight: 600,

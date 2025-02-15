@@ -174,9 +174,13 @@ const Header = ({ currentTheme, onThemeChange }) => {
                   fontWeight: 500,
                   px: 2,
                   height: '100%',
+                  transition: 'none !important',
+                  transform: 'none !important',
+                  '& *': { transition: 'none !important' },
                   '&:hover': {
                     background: 'transparent',
                     color: 'primary.main',
+                    transform: 'none !important',
                   },
                 }}
               >
