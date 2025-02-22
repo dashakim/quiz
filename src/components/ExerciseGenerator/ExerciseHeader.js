@@ -1,4 +1,7 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography, Box } from '@mui/material';
+import React from 'react';
+import { Box, Button, FormControl, MenuItem, Select, Stack, Typography, useTheme, alpha } from '@mui/material';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import PsychologyIcon from '@mui/icons-material/Psychology';
 
 const ExerciseHeader = ({
   selectedLevel,
@@ -7,134 +10,177 @@ const ExerciseHeader = ({
   handleExerciseTypeChange,
   currentExercise,
   generateNewExercise,
-}) => (
-  <Box
-    sx={{
-      width: '100%',
-      minHeight: '56px',
-      mb: 2,
-      position: 'relative',
-      zIndex: 1,
-    }}
-  >
-    <Stack
-      direction={{ xs: 'column', sm: 'row' }}
-      justifyContent="space-between"
-      alignItems={{ xs: 'flex-start', sm: 'center' }}
-      spacing={2}
+}) => {
+  const theme = useTheme();
+
+  return (
+    <Box
       sx={{
         width: '100%',
-        minHeight: 'inherit',
+        minHeight: '56px',
+        mb: 2,
+        position: 'relative',
+        zIndex: 1,
       }}
     >
-      <Typography
-        variant="h6"
+      <Box
         sx={{
-          minWidth: 'max-content',
-          pt: { xs: 1, sm: 0 },
+          position: 'absolute',
+          width: 150,
+          height: 150,
+          borderRadius: '50%',
+          background: `linear-gradient(45deg, ${alpha(theme.palette.primary.main, 0.15)}, ${alpha(theme.palette.secondary.main, 0.15)})`,
+          filter: 'blur(40px)',
+          top: -50,
+          left: -50,
         }}
-      >
-        Practice Generator
-      </Typography>
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 150,
+          height: 150,
+          borderRadius: '50%',
+          background: `linear-gradient(45deg, ${alpha(theme.palette.secondary.main, 0.15)}, ${alpha(theme.palette.primary.main, 0.15)})`,
+          filter: 'blur(40px)',
+          bottom: -50,
+          right: -50,
+        }}
+      />
 
+      {/* Content */}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        spacing={2}
+        justifyContent="space-between"
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        spacing={3}
         sx={{
-          width: { xs: '100%', sm: 'auto' },
-          minHeight: 'inherit',
+          position: 'relative',
+          width: '100%',
+          p: 3,
         }}
       >
-        <FormControl
+        {/* Header with Icon */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Box
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              boxShadow: `0 4px 20px ${alpha(theme.palette.primary.main, 0.4)}`,
+            }}
+          >
+            <PsychologyIcon sx={{ color: 'white', fontSize: 28 }} />
+          </Box>
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{
+                background: `-webkit-linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 'bold',
+              }}
+            >
+              Practice Generator
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Select your preferences below
+            </Typography>
+          </Box>
+        </Stack>
+
+        {/* Controls */}
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
           sx={{
-            minWidth: 120,
-            width: { xs: '100%', sm: 200 },
+            width: { xs: '100%', sm: 'auto' },
           }}
         >
-          <InputLabel
+          <FormControl
             sx={{
-              backgroundColor: 'background.paper',
-              px: 0.5,
+              minWidth: { xs: '100%', sm: 200 },
             }}
           >
-            Level
-          </InputLabel>
-          <Select
-            value={selectedLevel}
-            label="Level"
-            onChange={(e) => handleLevelChange(e.target.value)}
-            size="small"
-            MenuProps={{
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'left',
-              },
-              transformOrigin: {
-                vertical: 'top',
-                horizontal: 'left',
-              },
-              sx: { zIndex: 1300 },
-            }}
-          >
-            <MenuItem value="A1">A1 (Basic)</MenuItem>
-            <MenuItem value="A2">A2 (Elementary)</MenuItem>
-          </Select>
-        </FormControl>
+            <Select
+              value={selectedLevel}
+              onChange={(e) => handleLevelChange(e.target.value)}
+              size="small"
+              sx={{
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: alpha(theme.palette.divider, 0.2),
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: theme.palette.primary.main,
+                },
+              }}
+            >
+              <MenuItem value="A1">A1 (Basic)</MenuItem>
+              <MenuItem value="A2">A2 (Elementary)</MenuItem>
+            </Select>
+          </FormControl>
 
-        <FormControl
-          sx={{
-            minWidth: 150,
-            width: { xs: '100%', sm: 200 },
-          }}
-        >
-          <InputLabel
+          <FormControl
             sx={{
-              backgroundColor: 'background.paper',
-              px: 0.5,
+              minWidth: { xs: '100%', sm: 200 },
             }}
           >
-            Exercise Type
-          </InputLabel>
-          <Select
-            value={exerciseType}
-            label="Exercise Type"
-            onChange={(e) => handleExerciseTypeChange(e.target.value)}
-            size="small"
-            MenuProps={{
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'left',
-              },
-              transformOrigin: {
-                vertical: 'top',
-                horizontal: 'left',
-              },
-              sx: { zIndex: 1300 },
-            }}
-          >
-            <MenuItem value="multipleChoice">Multiple Choice</MenuItem>
-            <MenuItem value="wordCompletion">Complete the Word</MenuItem>
-            <MenuItem value="articles">Articles</MenuItem>
-          </Select>
-        </FormControl>
+            <Select
+              value={exerciseType}
+              onChange={(e) => handleExerciseTypeChange(e.target.value)}
+              size="small"
+              sx={{
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: alpha(theme.palette.divider, 0.2),
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: theme.palette.primary.main,
+                },
+              }}
+            >
+              <MenuItem value="multipleChoice">Multiple Choice</MenuItem>
+              <MenuItem value="wordCompletion">Complete the Word</MenuItem>
+              <MenuItem value="articles">Articles</MenuItem>
+            </Select>
+          </FormControl>
 
-        {!currentExercise && (
-          <Button
-            variant="contained"
-            onClick={generateNewExercise}
-            sx={{
-              bgcolor: '#a78bfa',
-              '&:hover': { bgcolor: 'primary.actionBlue' },
-              width: { xs: '100%', sm: 'auto' },
-              minWidth: { sm: '120px' },
-            }}
-          >
-            Start Exercise
-          </Button>
-        )}
+          {!currentExercise && (
+            <Button
+              variant="contained"
+              onClick={generateNewExercise}
+              endIcon={<AutoAwesomeIcon />}
+              sx={{
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontWeight: 500,
+                boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.4)}`,
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { sm: '140px' },
+                '&:hover': {
+                  background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                  transform: 'translateY(-1px)',
+                  boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.6)}`,
+                },
+                transition: 'all 0.2s ease-in-out',
+              }}
+            >
+              Start Exercise
+            </Button>
+          )}
+        </Stack>
       </Stack>
-    </Stack>
-  </Box>
-);
+    </Box>
+  );
+};
 
 export default ExerciseHeader;

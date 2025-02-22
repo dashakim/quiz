@@ -8,14 +8,17 @@ const HeaderVideo = () => {
   const handleGetStarted = () => {
     navigate('/learning-hub');
   };
+
   return (
     <Box
       sx={{
         position: 'relative',
-        height: '90vh',
+        height: '85vh',
         width: '100%',
         overflow: 'hidden',
         mt: { xs: '56px', sm: '64px' },
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Box
@@ -25,6 +28,8 @@ const HeaderVideo = () => {
         loop
         sx={{
           position: 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
           objectFit: 'cover',
@@ -56,6 +61,7 @@ const HeaderVideo = () => {
           alignItems: 'center',
           textAlign: 'center',
           color: 'white',
+          px: { xs: 2, sm: 3, md: 4 },
         }}
       >
         <Typography

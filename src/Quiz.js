@@ -277,8 +277,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
               ))}
             </List>
           </Card>
-
-          {/* Main Content */}
           <Box sx={{ flex: 1 }}>
             <Card
               sx={{
@@ -290,7 +288,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                 bgcolor: 'background.paper',
               }}
             >
-              {/* Header */}
               <Box
                 sx={{
                   p: 3,
@@ -320,7 +317,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                   </IconButton>
                 </Box>
               </Box>
-
               <Box
                 sx={{
                   p: 3,
@@ -349,10 +345,9 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                         boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 2],
                       }}
                     />
-
                     <Grid2 container spacing={1} size={4}>
                       {words[currentWord].options.map((option) => (
-                        <Grid2 item size={6} key={option}>
+                        <Grid2 size={6} key={option}>
                           <SelectionButton
                             onClick={() => handleAnswer(option)}
                             active={selectedAnswer === option}
@@ -384,8 +379,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                   </motion.div>
                 </AnimatePresence>
               </Box>
-
-              {/* Footer */}
               <Box
                 sx={{
                   p: 3,
@@ -415,7 +408,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
                     </Typography>
                   </Box>
                 </Box>
-
                 <Button
                   variant="contained"
                   size="large"
@@ -431,7 +423,6 @@ const QuizApp = ({ currentTheme, onThemeChange }) => {
           </Box>
         </Box>
       </Container>
-
       <Drawer
         anchor="right"
         open={drawerOpen}

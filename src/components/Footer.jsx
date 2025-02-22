@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import { Box, Container, Typography, Link, Divider } from '@mui/material';
+import { Box, Container, Typography, Link } from '@mui/material';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
