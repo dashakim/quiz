@@ -26,7 +26,7 @@ import '@fontsource/plus-jakarta-sans/800.css';
 import Header from './Header';
 import HeaderVideo from './HeaderVideo';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Quiz from './Quiz';
+import ContextQuiz from './Quiz';
 import WordForm from './WordForm';
 import LearningHub from './LearningHub';
 import { Box } from '@mui/material';
@@ -84,7 +84,10 @@ function App() {
           <Routes>
             <Route path="/" element={<HeaderVideo />} />
             <Route path="/learning-hub" element={<LearningHub />} />
-            <Route path="/quiz" element={<Quiz currentTheme={quizTheme} onThemeChange={handleQuizThemeChange} />} />
+            <Route
+              path="/quiz"
+              element={<ContextQuiz currentTheme={quizTheme} onThemeChange={handleQuizThemeChange} />}
+            />
             <Route path="/words" element={<WordForm />} />
           </Routes>
           <Footer />

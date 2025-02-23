@@ -27,8 +27,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import LoginIcon from '@mui/icons-material/Login';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import CloseIcon from '@mui/icons-material/Close';
-import { Palette } from '@mui/icons-material';
-import { themes } from './themes';
 
 const MemorifyLogo = styled(Typography)(({ theme }) => ({
   fontSize: '2rem',
@@ -277,20 +275,6 @@ const Header = ({ currentTheme, onThemeChange }) => {
           <IconButton onClick={(e) => setMobileMenuOpen(e.currentTarget)} sx={{ color: 'text.primary' }}>
             <MenuIcon />
           </IconButton>
-          <IconButton onClick={handleThemeMenuOpen} sx={{ ml: 1 }}>
-            <Palette />
-          </IconButton>
-          <Menu anchorEl={themeMenu} open={Boolean(themeMenu)} onClose={handleThemeMenuClose}>
-            {Object.keys(themes).map((themeName) => (
-              <MenuItem
-                key={themeName}
-                selected={currentTheme === themeName}
-                onClick={() => handleThemeSelect(themeName)}
-              >
-                {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
-              </MenuItem>
-            ))}
-          </Menu>
           <Menu
             anchorEl={mobileMenuOpen}
             open={Boolean(mobileMenuOpen)}
