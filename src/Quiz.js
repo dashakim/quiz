@@ -1,443 +1,371 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Box,
-  Typography,
-  Card,
-  CardMedia,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Avatar,
-  Button,
-  Grid2,
-  Tooltip,
-  Stack,
-  useTheme,
-} from '@mui/material';
-import { VolumeUp, Settings, Grade, TrendingUp, Person } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
-import ThemeSelector from './ThemeSelector';
-import { Palette, DarkMode, LightMode } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Box, Button, Container, Typography, Card, CardContent, LinearProgress, Paper, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const categories = ['Food', 'People', 'City', 'Verbs', 'Articles'];
-
-const SettingsBar = ({ onThemeClick, onVolumeClick, isDark, onToggleDark }) => (
-  <Stack
-    direction="row"
-    spacing={1}
-    sx={{
-      position: 'fixed',
-      top: 110,
-      right: 350,
-      zIndex: 1000,
-      bgcolor: 'background.paper',
-      borderRadius: 'pill',
-      p: 1,
-    }}
-  >
-    <Tooltip title="Change Theme">
-      <IconButton onClick={onThemeClick} color="primary">
-        <Palette />
-      </IconButton>
-    </Tooltip>
-    <Tooltip title="Volume">
-      <IconButton onClick={onVolumeClick} color="primary">
-        <VolumeUp />
-      </IconButton>
-    </Tooltip>
-    <Tooltip title={isDark ? 'Light Mode' : 'Dark Mode'}>
-      <IconButton onClick={onToggleDark} color="primary">
-        {isDark ? <LightMode /> : <DarkMode />}
-      </IconButton>
-    </Tooltip>
-  </Stack>
-);
-
-const words = [
-  {
-    id: 1,
-    word: 'café',
-    image: '/images/cafe.webp',
-    translation: 'coffee',
-    options: ['tea', 'coffee', 'water', 'milk'],
-    category: 'Food',
-    level: 'A1',
-    hint: 'Morning ritual',
-    usage: 'Vou tomar um café',
-    audio: 'cafe.mp3',
-  },
-  {
-    id: 2,
-    word: 'praia',
-    image: './images/beach.webp',
-    translation: 'beach',
-    options: ['mountain', 'beach', 'forest', 'city'],
-    category: 'places',
-    hint: 'Sandy paradise',
-    usage: 'Vamos à praia',
-    level: 'A1',
-  },
-];
-
-const SelectionButton = ({ children, onClick, active, disabled, correct, wrong }) => {
-  const theme = useTheme();
-  return (
-    <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.03 }}
-      whileTap={{ scale: disabled ? 1 : 0.97 }}
-      onClick={onClick}
-      disabled={disabled}
-      style={{
-        width: '100%',
-        padding: '10px 10px',
-        marginTop: '35',
-        fontSize: '1.1rem',
-        fontWeight: 500,
-        border: `10px solid ${theme.palette.background.paper}`,
-        borderRadius: theme.shape.borderRadius * theme.shape.borderRadiusMultipliers.button,
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        boxShadow: theme.shadows[1],
-        color: theme.palette.text.primary,
-        background: correct
-          ? theme.palette.success.light
-          : wrong
-            ? theme.palette.error.light
-            : theme.palette.background.paper,
-        textAlign: 'center',
-        transition: 'all 0.3s ease',
-      }}
-    >
-      {children}
-    </motion.button>
-  );
-};
-
-const ProgressRing = ({ progress }) => {
-  const theme = useTheme();
-  return (
-    <Box sx={{ position: 'relative', width: 60, height: 60 }}>
-      <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
-        <path
-          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-          fill="none"
-          stroke={theme.palette.grey[200]}
-          strokeWidth="3"
-        />
-        <path
-          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-          fill="none"
-          stroke={theme.palette.primary.main}
-          strokeWidth="3"
-          strokeDasharray={`${progress}, 100`}
-        />
-      </svg>
-      <Typography
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          color: 'primary.main',
-          fontWeight: 700,
-        }}
-      >
-        {Math.round(progress)}%
-      </Typography>
-    </Box>
-  );
-};
-
-const QuizApp = ({ currentTheme, onThemeChange }) => {
-  const theme = useTheme();
-  const [currentWord, setCurrentWord] = useState(0);
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
+const ContextQuiz = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    setProgress((currentWord / words.length) * 100);
-  }, [currentWord]);
+  const [score, setScore] = useState(0);
+  const [showExamples, setShowExamples] = useState(false);
 
-  const handleAnswer = (answer) => {
-    setSelectedAnswer(answer);
-    setShowAnswer(true);
+  const questions = [
+    {
+      word: 'Obrigado',
+      options: ['Please', 'Thank you', 'Hello', 'Goodbye'],
+      correct: 1,
+      context: 'Essential Portuguese',
+      level: 'Beginner',
+      examples: [
+        {
+          portuguese: 'Obrigado pela sua ajuda',
+          english: 'Thank you for your help',
+          context: 'Formal',
+        },
+        {
+          portuguese: 'Muito obrigado!',
+          english: 'Thank you very much!',
+          context: 'Enthusiastic',
+        },
+        {
+          portuguese: 'Obrigado por tudo',
+          english: 'Thank you for everything',
+          context: 'Heartfelt',
+        },
+      ],
+    },
+    {
+      word: 'Bom dia',
+      options: ['Good night', 'Good afternoon', 'Good morning', 'Good evening'],
+      correct: 2,
+      context: 'Daily Greetings',
+      level: 'Beginner',
+      examples: [
+        {
+          portuguese: 'Bom dia! Como está?',
+          english: 'Good morning! How are you?',
+          context: 'Casual greeting',
+        },
+        {
+          portuguese: 'Melhor bom dia!',
+          english: 'Very good morning!',
+          context: 'Enthusiastic',
+        },
+        {
+          portuguese: 'Bom dia a todos',
+          english: 'Good morning everyone',
+          context: 'Group greeting',
+        },
+      ],
+    },
+  ];
 
-    if (answer === words[currentWord].translation) {
-      setStreak((s) => s + 1);
-      setScore((s) => s + 10 * (streak + 1));
+  const StyledButton = styled(Button)(({ theme, isCorrect, isWrong }) => ({
+    padding: '12px 16px',
+    borderRadius: '12px',
+    fontSize: '0.925rem',
+    fontWeight: 600,
+    width: '100%',
+    textAlign: 'left',
+    backgroundColor: isCorrect
+      ? 'rgba(16, 185, 129, 0.95)'
+      : isWrong
+        ? 'rgba(239, 68, 68, 0.95)'
+        : 'rgba(255, 255, 255, 0.1)',
+    color: '#ffffff',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid',
+    borderColor: isCorrect
+      ? 'rgba(16, 185, 129, 0.3)'
+      : isWrong
+        ? 'rgba(239, 68, 68, 0.3)'
+        : 'rgba(255, 255, 255, 0.2)',
+    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+    '&:hover': {
+      backgroundColor: isCorrect
+        ? 'rgba(16, 185, 129, 1)'
+        : isWrong
+          ? 'rgba(239, 68, 68, 1)'
+          : 'rgba(255, 255, 255, 0.15)',
+      transform: 'translateY(-1px)',
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+    },
+    '&:disabled': {
+      opacity: 1,
+    },
+    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+    [theme.breakpoints.down('sm')]: {
+      padding: '10px 14px',
+      fontSize: '0.875rem',
+    },
+  }));
+
+  const handleAnswerClick = (index) => {
+    setSelectedAnswer(index);
+    if (index === questions[currentQuestion].correct) {
+      setScore(score + 1);
+      setTimeout(() => setShowExamples(true), 800);
     } else {
-      setStreak(0);
+      setTimeout(() => {
+        if (currentQuestion < questions.length - 1) {
+          setCurrentQuestion(currentQuestion + 1);
+          setSelectedAnswer(null);
+        }
+      }, 1200);
     }
+  };
 
-    setTimeout(() => {
-      if (currentWord < words.length - 1) {
-        setCurrentWord((c) => c + 1);
-        setShowAnswer(false);
-        setSelectedAnswer(null);
-      }
-    }, 1200);
+  const handleNextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer(null);
+      setShowExamples(false);
+    }
   };
 
   return (
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: 'background.default',
-        py: 3,
-        transition: theme.transitions.create(['background-color']),
+        background: 'linear-gradient(135deg, #1E1E2E 0%, #2D2B55 100%)',
+        py: { xs: 2, sm: 3 },
+        px: { xs: 1, sm: 2 },
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.1) 0%, rgba(123, 97, 255, 0) 50%)',
+          pointerEvents: 'none',
+        },
       }}
     >
-      <Box>
-        <SettingsBar
-          onThemeClick={() => setDrawerOpen(true)}
-          onVolumeClick={() => {}}
-          isDark={isDark}
-          onToggleDark={() => setIsDark(!isDark)}
-        />
-      </Box>
-      <Container maxWidth="lg">
+      <Container maxWidth="sm">
         <Box
           sx={{
             display: 'flex',
-            gap: 4,
-            height: 'calc(90vh - 48px)',
+            justifyContent: 'flex-end',
+            gap: 2,
+            mb: { xs: 2, sm: 3 },
+            position: 'relative',
+            zIndex: 1,
           }}
         >
-          {/* Sidebar */}
-          <Card
+          <Typography
+            variant="body2"
             sx={{
-              width: 280,
-              borderRadius: (theme) => theme.shape.borderRadius * 2,
-              p: 3,
-              display: { xs: 'none', md: 'flex' },
-              flexDirection: 'column',
-              bgcolor: 'background.paper',
-              boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 1],
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontWeight: 600,
+              fontSize: { xs: '0.75rem', sm: '0.875rem' },
             }}
           >
-            <Box sx={{ mb: 4, textAlign: 'center' }}>
-              <Avatar
+            Progress: {currentQuestion + 1}/{questions.length} • Score: {score}
+          </Typography>
+        </Box>
+
+        <Card
+          sx={{
+            borderRadius: { xs: 2, sm: 3 },
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.2)',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(45deg, rgba(123, 97, 255, 0.05) 0%, rgba(123, 97, 255, 0) 100%)',
+              pointerEvents: 'none',
+            },
+          }}
+        >
+          <LinearProgress
+            variant="determinate"
+            value={((currentQuestion + 1) / questions.length) * 100}
+            sx={{
+              height: 3,
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              '& .MuiLinearProgress-bar': {
+                background: 'linear-gradient(90deg, #7B61FF 0%, #FF61B6 100%)',
+              },
+            }}
+          />
+
+          <CardContent
+            sx={{
+              p: { xs: 2, sm: 3 },
+            }}
+          >
+            <Box mb={3}>
+              <Typography
+                component="span"
                 sx={{
-                  width: 80,
-                  height: 80,
-                  mx: 'auto',
-                  mb: 2,
-                  bgcolor: 'primary.light',
+                  display: 'inline-block',
+                  background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.2) 0%, rgba(123, 97, 255, 0.1) 100%)',
+                  color: '#fff',
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 2,
+                  mb: 1.5,
+                  fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                  fontWeight: 600,
+                  letterSpacing: '0.02em',
+                  border: '1px solid rgba(123, 97, 255, 0.2)',
+                  backdropFilter: 'blur(10px)',
                 }}
-                alt="User Sharp"
-                src="/images/d.jpeg"
               >
-                <Person />
-              </Avatar>
-              <Typography variant="h6" gutterBottom color="text.primary">
-                Daria Kim
+                {questions[currentQuestion]?.level}
               </Typography>
-              <Typography color="text.secondary">Learning since 2024</Typography>
-            </Box>
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="overline" color="text.secondary">
-                Progress
+
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 1.5,
+                  fontWeight: 700,
+                  color: '#fff',
+                  fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                  letterSpacing: '-0.02em',
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.8) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                {questions[currentQuestion]?.word}
               </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-                <ProgressRing progress={progress} />
-              </Box>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontWeight: 500,
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
+                }}
+              >
+                Choose the correct translation
+              </Typography>
             </Box>
-            <List>
-              {categories.map((cat) => (
-                <ListItem
-                  key={cat}
-                  button
-                  selected={words[currentWord].category === cat}
+
+            {!showExamples ? (
+              <Stack spacing={1.5}>
+                {questions[currentQuestion]?.options.map((option, index) => (
+                  <StyledButton
+                    key={index}
+                    onClick={() => handleAnswerClick(index)}
+                    disabled={selectedAnswer !== null}
+                    isCorrect={selectedAnswer !== null && index === questions[currentQuestion].correct}
+                    isWrong={selectedAnswer === index && index !== questions[currentQuestion].correct}
+                  >
+                    {option}
+                  </StyledButton>
+                ))}
+              </Stack>
+            ) : (
+              <Box>
+                <Typography
+                  variant="subtitle1"
                   sx={{
-                    borderRadius: (theme) => theme.shape.borderRadius,
-                    mb: 1,
-                    '&.Mui-selected': {
-                      backgroundColor: 'primary.light',
-                      '&:hover': {
-                        backgroundColor: 'primary.light',
-                      },
-                    },
+                    color: '#10B981',
+                    fontWeight: 600,
+                    mb: 2,
+                    fontSize: { xs: '1rem', sm: '1.125rem' },
                   }}
                 >
-                  <ListItemText
-                    primary={cat}
-                    sx={{
-                      '.MuiListItemText-primary': {
-                        color: words[currentWord].category === cat ? 'common.dark' : 'text.primary',
-                      },
-                    }}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Card>
-          <Box sx={{ flex: 1 }}>
-            <Card
-              sx={{
-                borderRadius: (theme) => theme.shape.borderRadius * 2,
-                overflow: 'hidden',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                bgcolor: 'background.paper',
-              }}
-            >
-              <Box
-                sx={{
-                  p: 3,
-                  borderBottom: '1px solid',
-                  borderColor: 'divider',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  bgcolor: 'background.paper',
-                }}
-              >
-                <Box>
-                  <Typography variant="overline" color="primary" sx={{ fontWeight: 600 }}>
-                    {words[currentWord].category} • Level {words[currentWord].level}
-                  </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary' }}>
-                    {words[currentWord].word}
-                  </Typography>
-                </Box>
+                  Correct! Here are some examples:
+                </Typography>
 
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <IconButton sx={{ color: 'primary.main' }}>
-                    <VolumeUp />
-                  </IconButton>
-                  <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: 'primary.main' }}>
-                    <Settings />
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  p: 3,
-                  flex: 1,
-                  overflowY: 'auto',
-                  background: (theme) => theme.palette.background.gradient,
-                  transition: theme.transitions.create(['background-color']),
-                }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentWord}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="300"
-                      image={words[currentWord].image}
-                      alt={words[currentWord].word}
+                <Stack spacing={1.5}>
+                  {questions[currentQuestion]?.examples.map((example, index) => (
+                    <Paper
+                      key={index}
+                      elevation={0}
                       sx={{
-                        borderRadius: (theme) => theme.shape.borderRadius,
-                        mb: 4,
-                        boxShadow: (theme) => theme.shadows[theme.palette.mode === 'dark' ? 4 : 2],
-                      }}
-                    />
-                    <Grid2 container spacing={1} size={4}>
-                      {words[currentWord].options.map((option) => (
-                        <Grid2 size={6} key={option}>
-                          <SelectionButton
-                            onClick={() => handleAnswer(option)}
-                            active={selectedAnswer === option}
-                            disabled={showAnswer}
-                            correct={showAnswer && option === words[currentWord].translation}
-                            wrong={showAnswer && option === selectedAnswer && option !== words[currentWord].translation}
-                          >
-                            {option}
-                          </SelectionButton>
-                        </Grid2>
-                      ))}
-                    </Grid2>
-
-                    <Box
-                      sx={{
-                        p: 2,
-                        marginTop: 5,
-                        borderRadius: (theme) => theme.shape.borderRadius * 2,
-                        bgcolor: 'rgba(255,255,255,0.15)',
+                        p: { xs: 1.5, sm: 2 },
+                        borderRadius: 2,
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        '&:hover': {
+                          transform: 'translateY(-1px)',
+                          background: 'rgba(255, 255, 255, 0.08)',
+                        },
+                        transition: 'all 0.2s ease',
                       }}
                     >
-                      <Typography variant="h6" gutterBottom color="text.primary">
-                        💡 {words[currentWord].hint}
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: 'rgba(255, 255, 255, 0.5)',
+                          fontWeight: 500,
+                          display: 'block',
+                          mb: 0.5,
+                          fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                        }}
+                      >
+                        {example.context}
                       </Typography>
-                      <Typography sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-                        "{words[currentWord].usage}"
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 600,
+                          color: '#fff',
+                          mb: 0.5,
+                          fontSize: { xs: '0.875rem', sm: '1rem' },
+                        }}
+                      >
+                        {example.portuguese}
                       </Typography>
-                    </Box>
-                  </motion.div>
-                </AnimatePresence>
-              </Box>
-              <Box
-                sx={{
-                  p: 3,
-                  borderTop: '1px solid',
-                  borderColor: 'divider',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  bgcolor: 'background.paper',
-                }}
-              >
-                <Box sx={{ display: 'flex', gap: 3 }}>
-                  <Box>
-                    <Typography color="text.secondary" variant="overline">
-                      Score
-                    </Typography>
-                    <Typography variant="h6" color="text.primary">
-                      {score} <Grade sx={{ verticalAlign: 'middle', ml: 0.5, color: 'primary.main' }} />
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography color="text.secondary" variant="overline">
-                      Streak
-                    </Typography>
-                    <Typography variant="h6" color="text.primary">
-                      {streak} <TrendingUp sx={{ verticalAlign: 'middle', ml: 0.5, color: 'primary.main' }} />
-                    </Typography>
-                  </Box>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: 'rgba(255, 255, 255, 0.7)',
+                          fontWeight: 500,
+                          fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                        }}
+                      >
+                        {example.english}
+                      </Typography>
+                    </Paper>
+                  ))}
+                </Stack>
+
+                <Box textAlign="right" mt={3}>
+                  <Button
+                    onClick={handleNextQuestion}
+                    sx={{
+                      background: 'linear-gradient(135deg, #7B61FF 0%, #FF61B6 100%)',
+                      color: 'white',
+                      px: { xs: 3, sm: 4 },
+                      py: { xs: 1, sm: 1.25 },
+                      borderRadius: 2,
+                      fontSize: { xs: '0.875rem', sm: '1rem' },
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      '&:hover': {
+                        opacity: 0.95,
+                        transform: 'translateY(-1px)',
+                      },
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    Continue
+                  </Button>
                 </Box>
-                <Button
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    borderRadius: (theme) => theme.shape.borderRadius * 1.5,
-                    boxShadow: (theme) => theme.shadows[2],
-                  }}
-                >
-                  Next Word
-                </Button>
               </Box>
-            </Card>
-          </Box>
-        </Box>
+            )}
+          </CardContent>
+        </Card>
       </Container>
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        PaperProps={{
-          sx: {
-            bgcolor: 'background.paper',
-            width: 360,
-          },
-        }}
-      >
-        <ThemeSelector currentTheme={currentTheme} onThemeChange={onThemeChange} onClose={() => setDrawerOpen(false)} />
-      </Drawer>
     </Box>
   );
 };
 
-export default QuizApp;
+export default ContextQuiz;
