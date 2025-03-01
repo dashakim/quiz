@@ -59,7 +59,7 @@ const StableAppBar = styled(AppBar)(({ theme, scrolled }) => ({
   willChange: 'transform',
 }));
 
-const Header = ({ currentTheme, onThemeChange }) => {
+const Header = ({ onThemeChange }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [scrolled, setScrolled] = useState(false);

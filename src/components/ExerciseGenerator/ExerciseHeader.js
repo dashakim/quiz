@@ -60,7 +60,6 @@ const ExerciseHeader = ({
           p: 3,
         }}
       >
-        {/* Header with Icon */}
         <Stack direction="row" spacing={2} alignItems="center">
           <Box
             sx={{
@@ -93,8 +92,6 @@ const ExerciseHeader = ({
             </Typography>
           </Box>
         </Stack>
-
-        {/* Controls */}
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
