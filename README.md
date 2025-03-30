@@ -1,3 +1,69 @@
+# Portuguese Language Learning Quiz
+
+A modern, interactive quiz application for learning Portuguese. Built with React and Material-UI.
+
+## Features
+
+- Multiple choice questions with immediate feedback
+- Context-based learning with example sentences
+- Progress tracking and scoring
+- Responsive design for all devices
+- Beautiful UI with glassmorphism effects
+- Multiple exercise types (Multiple Choice, Word Completion, Articles)
+
+## Project Structure
+
+```
+src/
+├── components/         # React components
+│   ├── Quiz/          # Quiz-related components
+│   └── ExerciseGenerator/  # Exercise generation components
+├── hooks/             # Custom React hooks
+├── styles/            # Shared styles and theme
+├── utils/             # Utility functions
+├── constants/         # Constants and configuration
+└── assets/           # Static assets (images, fonts)
+```
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/portuguese-quiz.git
+cd portuguese-quiz
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Available Scripts
+
+- `npm start` - Runs the app in development mode
+- `npm test` - Launches the test runner
+- `npm run build` - Builds the app for production
+- `npm run eject` - Ejects from Create React App
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
