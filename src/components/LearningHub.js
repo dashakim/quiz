@@ -14,10 +14,10 @@ import {
   alpha,
 } from '@mui/material';
 import { Home, School, Park, History, Restaurant, Translate } from '@mui/icons-material';
-import PortuguesePractice from './components/PortuguesePractice';
-import WordKitchenSection from './components/WordKitchenSection';
-import TimeMachineSection from './components/TimeMachineSection';
-import WordGardenSection from './components/WordGardenSection';
+import PortuguesePractice from './PortuguesePractice';
+import WordKitchenSection from './WordKitchenSection';
+import TimeMachineSection from './TimeMachineSection';
+import WordGardenSection from './WordGardenSection';
 
 const categories = [
   { name: 'Daily Routines', icon: '🌅', description: 'Master everyday conversations and common situations' },

@@ -20,7 +20,6 @@ import {
   Fade,
   alpha,
   styled,
-  useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -59,14 +58,12 @@ const StableAppBar = styled(AppBar)(({ theme, scrolled }) => ({
   willChange: 'transform',
 }));
 
-const Header = ({ onThemeChange }) => {
-  const navigate = useNavigate();
-  const theme = useTheme();
+const Header = () => {
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(null);
   const [menuAnchors, setMenuAnchors] = useState({});
-  const [themeMenu, setThemeMenu] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,8 +96,8 @@ const Header = ({ onThemeChange }) => {
 
   const handleNavigation = (path) => {
     navigate(path);
-    if (mobileMenuOpen) {
-      setMobileMenuOpen(null);
+    if (mobileMenuAnchor) {
+      setMobileMenuAnchor(null);
     }
     setMenuAnchors({});
   };
@@ -118,22 +115,7 @@ const Header = ({ onThemeChange }) => {
       [key]: null,
     }));
   };
-
-  const handleThemeMenuOpen = (event) => {
-    setThemeMenu(event.currentTarget);
-  };
-
-  const handleThemeMenuClose = () => {
-    setThemeMenu(null);
-  };
-
-  const handleThemeSelect = (themeName) => {
-    if (onThemeChange) {
-      onThemeChange(themeName);
-    }
-    handleThemeMenuClose();
-  };
-
+    
   return (
     <StableAppBar elevation={scrolled ? 1 : 0} scrolled={scrolled}>
       <Box
@@ -272,13 +254,13 @@ const Header = ({ onThemeChange }) => {
         </Box>
 
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-          <IconButton onClick={(e) => setMobileMenuOpen(e.currentTarget)} sx={{ color: 'text.primary' }}>
+          <IconButton onClick={(e) => setMobileMenuAnchor(e.currentTarget)} sx={{ color: 'text.primary' }}>
             <MenuIcon />
           </IconButton>
           <Menu
-            anchorEl={mobileMenuOpen}
-            open={Boolean(mobileMenuOpen)}
-            onClose={() => setMobileMenuOpen(null)}
+            anchorEl={mobileMenuAnchor}
+            open={Boolean(mobileMenuAnchor)}
+            onClose={() => setMobileMenuAnchor(null)}
             PaperProps={{
               sx: {
                 width: 280,
