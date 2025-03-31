@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Card,
   TextField,
   Button,
+  Typography,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
-  Typography,
-  Grid2,
-  Autocomplete,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
-  Tab,
+  CircularProgress,
+  Alert,
+  Snackbar,
   Tabs,
+  Tab,
   Table,
   TableBody,
   TableCell,
@@ -25,12 +25,10 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
-  Alert,
-  Snackbar,
+  Grid2,
 } from '@mui/material';
 import { Close, Add, Save, Image, Delete, Edit } from '@mui/icons-material';
-import { wordService } from './firebaseConfig';
+import { wordService } from '../services/wordService';
 
 const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
@@ -40,7 +38,6 @@ const WordForm = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [editingWordId, setEditingWordId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
@@ -67,7 +64,6 @@ const WordForm = () => {
       const loadedWords = await wordService.getWords();
       setWords(loadedWords);
     } catch (err) {
-      setError(err.message);
       setSnackbar({ open: true, message: 'Error loading words', severity: 'error' });
     } finally {
       setLoading(false);
@@ -104,7 +100,6 @@ const WordForm = () => {
       await loadWords();
       handleCloseDialog();
     } catch (err) {
-      setError(err.message);
       setSnackbar({ open: true, message: 'Error saving word', severity: 'error' });
     } finally {
       setLoading(false);
@@ -118,7 +113,6 @@ const WordForm = () => {
       await loadWords();
       setSnackbar({ open: true, message: 'Word deleted successfully', severity: 'success' });
     } catch (err) {
-      setError(err.message);
       setSnackbar({ open: true, message: 'Error deleting word', severity: 'error' });
     } finally {
       setLoading(false);
