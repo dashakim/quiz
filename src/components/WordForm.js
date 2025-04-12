@@ -25,7 +25,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Grid2,
+  Grid,
 } from '@mui/material';
 import { Close, Add, Save, Image, Delete, Edit } from '@mui/icons-material';
 import { wordService } from '../services/wordService';
@@ -97,8 +97,9 @@ const WordForm = () => {
         await wordService.addWord(formData);
         setSnackbar({ open: true, message: 'Word added successfully', severity: 'success' });
       }
-      await loadWords();
-      handleCloseDialog();
+      setOpenDialog(false);
+      loadWords();
+      resetForm();
     } catch (err) {
       setSnackbar({ open: true, message: 'Error saving word', severity: 'error' });
     } finally {
@@ -110,8 +111,8 @@ const WordForm = () => {
     try {
       setLoading(true);
       await wordService.deleteWord(id);
-      await loadWords();
       setSnackbar({ open: true, message: 'Word deleted successfully', severity: 'success' });
+      loadWords();
     } catch (err) {
       setSnackbar({ open: true, message: 'Error deleting word', severity: 'error' });
     } finally {
@@ -121,13 +122,26 @@ const WordForm = () => {
 
   const handleEdit = (word) => {
     setEditingWordId(word.id);
-    setFormData(word);
+    setFormData({
+      word: word.word,
+      translation: word.translation,
+      category: word.category,
+      level: word.level,
+      hint: word.hint,
+      usage: word.usage,
+      options: word.options || ['', '', '', ''],
+      image: word.image,
+      audio: word.audio,
+    });
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setEditingWordId(null);
+    resetForm();
+  };
+
+  const resetForm = () => {
     setFormData({
       word: '',
       translation: '',
@@ -139,108 +153,75 @@ const WordForm = () => {
       image: '',
       audio: '',
     });
+    setEditingWordId(null);
   };
-
-  const handleImageSearch = async () => {
-    setFormData((prev) => ({
-      ...prev,
-      image: `/images/${formData.word.toLowerCase()}.webp`,
-    }));
-  };
-
-  if (loading && !words.length) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.default',
-        minHeight: '100vh',
-        py: 2,
-        px: 2,
-        m: 3,
-        position: 'relative',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        width: '100%',
-      }}
-    >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)}>
-          {categories.map((category) => (
-            <Tab key={category} label={category} />
-          ))}
-        </Tabs>
-      </Box>
-
+    <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h6">Words in {categories[currentTab]}</Typography>
-        <Button variant="contained" startIcon={<Add />} onClick={() => setOpenDialog(true)}>
-          Add New Word
+        <Typography variant="h4">Word Management</Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => setOpenDialog(true)}
+        >
+          Add Word
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Word</TableCell>
-              <TableCell>Translation</TableCell>
-              <TableCell>Level</TableCell>
-              <TableCell>Image</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {words
-              .filter((word) => word.category === categories[currentTab])
-              .map((word) => (
+      <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)}>
+        <Tab label="Words List" />
+        <Tab label="Categories" />
+      </Tabs>
+
+      {currentTab === 0 && (
+        <TableContainer component={Paper} sx={{ mt: 2 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Word</TableCell>
+                <TableCell>Translation</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>Level</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {words.map((word) => (
                 <TableRow key={word.id}>
                   <TableCell>{word.word}</TableCell>
                   <TableCell>{word.translation}</TableCell>
+                  <TableCell>{word.category}</TableCell>
                   <TableCell>{word.level}</TableCell>
                   <TableCell>
-                    {word.image && (
-                      <Box
-                        component="img"
-                        src={word.image}
-                        alt={word.word}
-                        sx={{ height: 50, width: 50, objectFit: 'cover', borderRadius: 1 }}
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleEdit(word)}>
+                    <IconButton onClick={() => handleEdit(word)}>
                       <Edit />
                     </IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(word.id)}>
+                    <IconButton onClick={() => handleDelete(word.id)}>
                       <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>
-          {editingWordId ? 'Edit Word' : 'Add New Word'}
-          <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 8, top: 8 }}>
-            <Close />
-          </IconButton>
-        </DialogTitle>
+        <DialogTitle>{editingWordId ? 'Edit Word' : 'Add New Word'}</DialogTitle>
         <DialogContent>
-          <Grid2 container spacing={3} size={1}>
-            <Grid2 item size={6}>
-              <TextField fullWidth label="Word" name="word" value={formData.word} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={6}>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Word"
+                name="word"
+                value={formData.word}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 label="Translation"
@@ -248,11 +229,16 @@ const WordForm = () => {
                 value={formData.translation}
                 onChange={handleChange}
               />
-            </Grid2>
-            <Grid2 item size={6}>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>
-                <Select name="category" value={formData.category} onChange={handleChange} label="Category">
+                <Select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  label="Category"
+                >
                   {categories.map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
@@ -260,11 +246,16 @@ const WordForm = () => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid2>
-            <Grid2 item size={6}>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>Level</InputLabel>
-                <Select name="level" value={formData.level} onChange={handleChange} label="Level">
+                <Select
+                  name="level"
+                  value={formData.level}
+                  onChange={handleChange}
+                  label="Level"
+                >
                   {levels.map((level) => (
                     <MenuItem key={level} value={level}>
                       {level}
@@ -272,50 +263,62 @@ const WordForm = () => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid2>
-            <Grid2 item size={12}>
-              <TextField fullWidth label="Hint" name="hint" value={formData.hint} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={12}>
-              <TextField fullWidth label="Usage Example" name="usage" value={formData.usage} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={12}>
-              <Typography variant="subtitle1" gutterBottom>
-                Answer Options
-              </Typography>
-              <Grid2 container spacing={2}>
-                {formData.options.map((option, index) => (
-                  <Grid2 item xs={6} key={index}>
-                    <TextField
-                      fullWidth
-                      label={`Option ${index + 1}`}
-                      value={option}
-                      onChange={(e) => handleOptionChange(index, e.target.value)}
-                    />
-                  </Grid2>
-                ))}
-              </Grid2>
-            </Grid2>
-            <Grid2 item size={12}>
-              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                <TextField fullWidth label="Image URL" name="image" value={formData.image} onChange={handleChange} />
-                <Button variant="contained" onClick={handleImageSearch} startIcon={<Image />}>
-                  Search
-                </Button>
-              </Box>
-            </Grid2>
-          </Grid2>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Hint"
+                name="hint"
+                value={formData.hint}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Usage Example"
+                name="usage"
+                value={formData.usage}
+                onChange={handleChange}
+                multiline
+                rows={2}
+              />
+            </Grid>
+            {formData.options.map((option, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <TextField
+                  fullWidth
+                  label={`Option ${index + 1}`}
+                  value={option}
+                  onChange={(e) => handleOptionChange(index, e.target.value)}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" startIcon={<Save />} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Save Word'}
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            disabled={loading}
+            startIcon={loading ? <CircularProgress size={20} /> : <Save />}
+          >
+            {editingWordId ? 'Update' : 'Save'}
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>

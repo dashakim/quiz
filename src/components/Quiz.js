@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Container, Typography, Card, CardContent, LinearProgress, Paper, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const ContextQuiz = () => {
+export const ContextQuiz = ({ currentTheme, onThemeChange }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);

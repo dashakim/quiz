@@ -1,31 +1,64 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { getDatabase, ref, push, set, get, update, remove } from 'firebase/database';
 import { firebaseConfig } from '../firebaseConfig';
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = getDatabase();
+const wordsRef = ref(db, 'words');
 
 export const wordService = {
   async getWords() {
-    const querySnapshot = await getDocs(collection(db, 'words'));
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    try {
+      const snapshot = await get(wordsRef);
+      if (!snapshot.exists()) {
+        return [];
+      }
+      const words = [];
+      snapshot.forEach((child) => {
+        words.push({
+          id: child.key,
+          ...child.val()
+        });
+      });
+      return words;
+    } catch (error) {
+      console.error('Error fetching words:', error);
+      throw new Error('Failed to fetch words');
+    }
   },
 
   async addWord(wordData) {
-    const docRef = await addDoc(collection(db, 'words'), wordData);
-    return docRef.id;
+    try {
+      const newWordRef = push(wordsRef);
+      await set(newWordRef, {
+        ...wordData,
+        createdAt: Date.now()
+      });
+      return newWordRef.key;
+    } catch (error) {
+      console.error('Error adding word:', error);
+      throw new Error('Failed to add word');
+    }
   },
 
   async updateWord(id, wordData) {
-    const wordRef = doc(db, 'words', id);
-    await updateDoc(wordRef, wordData);
+    try {
+      const wordRef = ref(db, `words/${id}`);
+      await update(wordRef, {
+        ...wordData,
+        updatedAt: Date.now()
+      });
+    } catch (error) {
+      console.error('Error updating word:', error);
+      throw new Error('Failed to update word');
+    }
   },
 
   async deleteWord(id) {
-    const wordRef = doc(db, 'words', id);
-    await deleteDoc(wordRef);
+    try {
+      const wordRef = ref(db, `words/${id}`);
+      await remove(wordRef);
+    } catch (error) {
+      console.error('Error deleting word:', error);
+      throw new Error('Failed to delete word');
+    }
   }
 }; 
