@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { themes } from './themes';
+import { themes } from './constants/themes';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -23,17 +23,17 @@ import '@fontsource/plus-jakarta-sans/400.css';
 import '@fontsource/plus-jakarta-sans/600.css';
 import '@fontsource/plus-jakarta-sans/700.css';
 import '@fontsource/plus-jakarta-sans/800.css';
-import Header from './Header';
-import HeaderVideo from './HeaderVideo';
+import Header from './components/Header/Header.js';
+import HeaderVideo from './components/common/HeaderVideo.js';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import ContextQuiz from './Quiz';
-import WordForm from './WordForm';
-import LearningHub from './LearningHub';
+import ContextQuiz from './components/quiz/Quiz.js';
+import WordForm from './components/forms/WordForm.js';
+import LearningHub from './components/Learning/LearningHub.js';
 import { Box } from '@mui/material';
-import Footer from './components/Footer';
+import Footer from './components/common/Footer.js';
 
 function App() {
-  const [appTheme, setAppTheme] = useState('languageHub');
+  const [appTheme] = useState('languageHub');
   const [quizTheme, setQuizTheme] = useState('default');
 
   useEffect(() => {

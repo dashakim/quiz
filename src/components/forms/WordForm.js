@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Card,
   TextField,
   Button,
   Select,
@@ -9,7 +8,7 @@ import {
   FormControl,
   InputLabel,
   Typography,
-  Grid2,
+  Grid,
   Autocomplete,
   Dialog,
   DialogTitle,
@@ -30,7 +29,7 @@ import {
   Snackbar,
 } from '@mui/material';
 import { Close, Add, Save, Image, Delete, Edit } from '@mui/icons-material';
-import { wordService } from './firebaseConfig';
+import { wordService } from '../../services/wordService';
 
 const categories = ['Food', 'Travel', 'Work', 'Home', 'Leisure'];
 const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
@@ -64,11 +63,17 @@ const WordForm = () => {
   const loadWords = async () => {
     try {
       setLoading(true);
+      setError(null);
       const loadedWords = await wordService.getWords();
       setWords(loadedWords);
     } catch (err) {
-      setError(err.message);
-      setSnackbar({ open: true, message: 'Error loading words', severity: 'error' });
+      console.error('Error loading words:', err);
+      setError(err.message || 'Failed to load words. Please check your internet connection and try again.');
+      setSnackbar({ 
+        open: true, 
+        message: err.message || 'Failed to load words. Please check your internet connection and try again.', 
+        severity: 'error' 
+      });
     } finally {
       setLoading(false);
     }
@@ -191,6 +196,18 @@ const WordForm = () => {
         </Button>
       </Box>
 
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      
+      {error && !loading && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -242,11 +259,11 @@ const WordForm = () => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Grid2 container spacing={3} size={1}>
-            <Grid2 item size={6}>
+          <Grid container spacing={3} size={1}>
+            <Grid item size={6}>
               <TextField fullWidth label="Word" name="word" value={formData.word} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={6}>
+            </Grid>
+            <Grid item size={6}>
               <TextField
                 fullWidth
                 label="Translation"
@@ -254,8 +271,8 @@ const WordForm = () => {
                 value={formData.translation}
                 onChange={handleChange}
               />
-            </Grid2>
-            <Grid2 item size={6}>
+            </Grid>
+            <Grid item size={6}>
               <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>
                 <Select name="category" value={formData.category} onChange={handleChange} label="Category">
@@ -266,8 +283,8 @@ const WordForm = () => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid2>
-            <Grid2 item size={6}>
+            </Grid>
+            <Grid item size={6}>
               <FormControl fullWidth>
                 <InputLabel>Level</InputLabel>
                 <Select name="level" value={formData.level} onChange={handleChange} label="Level">
@@ -278,39 +295,39 @@ const WordForm = () => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid2>
-            <Grid2 item size={12}>
+            </Grid>
+            <Grid item size={12}>
               <TextField fullWidth label="Hint" name="hint" value={formData.hint} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={12}>
+            </Grid>
+            <Grid item size={12}>
               <TextField fullWidth label="Usage Example" name="usage" value={formData.usage} onChange={handleChange} />
-            </Grid2>
-            <Grid2 item size={12}>
+            </Grid>
+            <Grid item size={12}>
               <Typography variant="subtitle1" gutterBottom>
                 Answer Options
               </Typography>
-              <Grid2 container spacing={2}>
+              <Grid container spacing={2}>
                 {formData.options.map((option, index) => (
-                  <Grid2 item xs={6} key={index}>
+                  <Grid item xs={6} key={index}>
                     <TextField
                       fullWidth
                       label={`Option ${index + 1}`}
                       value={option}
                       onChange={(e) => handleOptionChange(index, e.target.value)}
                     />
-                  </Grid2>
+                  </Grid>
                 ))}
-              </Grid2>
-            </Grid2>
-            <Grid2 item size={12}>
+              </Grid>
+            </Grid>
+            <Grid item size={12}>
               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                 <TextField fullWidth label="Image URL" name="image" value={formData.image} onChange={handleChange} />
                 <Button variant="contained" onClick={handleImageSearch} startIcon={<Image />}>
                   Search
                 </Button>
               </Box>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>

@@ -1,5 +1,5 @@
 import { Alert, Box, Card, Stack, Typography } from '@mui/material';
-import { grammarRules } from '../../exercisePatterns';
+import { grammarRules } from '../../utils/exercisePatterns';
 import React from 'react';
 
 const ExerciseHelp = ({ currentExercise, exerciseType, showHelp }) => {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { exerciseTypes, grammarRules } from '../exercisePatterns';
+import { exerciseTypes, grammarRules } from '../utils/exercisePatterns';
 
 export const useExercise = () => {
   const [currentExercise, setCurrentExercise] = useState(null);
